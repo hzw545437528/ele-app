@@ -63,7 +63,7 @@ export default class InputGroup extends Vue {
         line-height: 0.4rem;
         right: 0.01rem;
         top: 0.04rem;
-        width: 30%;
+        width: 40%;
         font-size: 14px;
         font-weight: bold;
         background: #fff;

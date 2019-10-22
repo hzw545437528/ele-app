@@ -6,8 +6,20 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'home',
+    component: () => import('../page/index.vue'),
+    children: [
+        {
+            path: '',
+            redirect: '/place'
+        },
+        {
+            path: '/place',
+            name: 'place',
+            component: () => import('../page/place.vue')
+          },
+    ]
   },
+  
   {
     path: '/login',
     name: 'login',
@@ -20,6 +32,15 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+    const isLogin = localStorage.ele_login ? true : false;
+    if (to.path == '/login') {
+        next();
+    } else {
+        isLogin ? next() : next('/login');
+    }
 })
 
 export default router

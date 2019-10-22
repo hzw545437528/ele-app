@@ -7,5 +7,18 @@ module.exports = {
             maskIcon: './favicon.ico',
             msTileImage: './favicon.ico'
         }
+    },
+    devServer: {
+        proxy: {
+            //配置跨域
+            '/api': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+                ws: true,
+                pathRewrite: {
+                    '^/api': ''
+                }
+            }
+        }
     }
 }
