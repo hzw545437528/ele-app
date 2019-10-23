@@ -1,42 +1,47 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import VueRouter, {RouterOptions} from 'vue-router'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    component: () => import('../page/index.vue'),
-    children: [
-        {
-            path: '',
-            redirect: '/place'
-        },
-        {
-            path: '/place',
-            name: 'place',
-            component: () => import('../page/place.vue')
-          },
-    ]
-  },
+    {
+        path: '/',
+        redirect: '/index'
+    },
+    {
+        path: '/index',
+        component: () => import('../page/index.vue'),
+        children: [
+            {
+                path: '',
+                redirect: '/place'
+            },
+            {
+                path: '/place',
+                name: 'place',
+                component: () => import('../page/place.vue')
+            },
+        ]
+    },
   
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('../page/login.vue')
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-  }
+    {
+        path: '/login',
+        name: 'login',
+        component: () => import('../page/login.vue')
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+    }
 ]
 
-const router = new VueRouter({
+const router: any = new VueRouter(({
   routes
-})
+} as RouterOptions))
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to: any, from: any, next: any) => {
     const isLogin = localStorage.ele_login ? true : false;
-    if (to.path == '/login') {
+    let path = ['/login', '/index', '/place']
+    if (path.includes(to.path)) {
         next();
     } else {
         isLogin ? next() : next('/login');

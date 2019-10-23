@@ -1,6 +1,9 @@
 
 $width: 100%;
 $height: 100%;
+$ext: inherit;
+$in_bl: inline-block;
+$f: #ffffff;
 
 @mixin flex {
     display: flex;
@@ -10,4 +13,14 @@ $height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@mixin triangle {
+    content: " ";
+    position: absolute;
+    display: $in-bl;
+    width: 0;
+    height: 0;
+    border: 5px solid #ffffff;
+    border-color: transparent transparent #ffffff;
 }
