@@ -179,6 +179,7 @@ export default {
     .card {
         display: none;
         position: absolute;
+        z-index: 999;
         background: $f;
         box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
     }

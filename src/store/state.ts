@@ -1,16 +1,9 @@
 interface ImpUser {
     user: String
 }
-
-class User implements ImpUser {
-    user: String = ""
+const state: any = {
+    user: null,
+    shopType: null,
+    shopType_1: null
 }
-
-
-class State extends User {
-
-}
-
-const state = new State()
-
 export default state;

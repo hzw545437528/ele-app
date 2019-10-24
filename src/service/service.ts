@@ -44,4 +44,12 @@ server.login = function (_this:any, phone: string, code: string): void {
     });
 }
 
+server.getShopType = function(_this:any, type: Object = {}) {
+    return new Promise((resolve, reject) => {
+        _this.$axios('/api/getShopType').then((res: any) => {
+            resolve(res)
+        })
+    })
+}
+
 export default server
