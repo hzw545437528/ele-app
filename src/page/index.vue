@@ -6,11 +6,12 @@
             </div>
             <router-view></router-view>
         </div>
-        <div class="right-bar"></div>
+        <SideBar></SideBar>
     </div>
 </template>
 <script>
 import Header from "../components/header/header.vue";
+import SideBar from "../components/common/SideBar.vue";
 export default {
     data() {
         return {
@@ -26,7 +27,8 @@ export default {
         }
     },
     components: {
-        Header
+        Header,
+        SideBar
     },
     created() {
         this.getUser();
@@ -46,6 +48,7 @@ export default {
         height: 60px;
         line-height: 60px;
         background: #1e89e0;
+        position: relative; 
     }
 
     .right-bar {
