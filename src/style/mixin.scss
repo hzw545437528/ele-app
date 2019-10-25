@@ -24,3 +24,25 @@ $f: #ffffff;
     border: 5px solid #ffffff;
     border-color: transparent transparent #ffffff;
 }
+
+@mixin triangletransparent {
+    content: " ";
+    position: absolute;
+    display: $in-bl;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-color:transparent transparent #747070;
+    transform: rotateZ(90deg);
+}
+
+@mixin trianglereverse {
+    content: " ";
+    position: absolute;
+    display: $in-bl;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-color:transparent transparent #ffffff;
+    transform: rotateZ(90deg);
+}

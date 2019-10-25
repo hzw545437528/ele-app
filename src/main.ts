@@ -8,6 +8,7 @@ import elementUi from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import server from './service/service';
 import './style/common.scss'
+import './assets/icon/iconfont.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
