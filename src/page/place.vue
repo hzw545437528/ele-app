@@ -23,13 +23,27 @@
         <div class="shop-type-wrap">
             <div class="excavator-filter">
                 <span class="excavator-filter-name type-title">商家分类:</span>
-                <a href="javascript:" class="all-shop type-title">全部商家</a>
                 <a
                     href="javascript:"
-                    class="types type-title"
+                    ref="allShop"
+                    class="all-shop type-title types hover"
+                    @click="selectAllType"
+                >全部商家</a>
+                <a
+                    href="javascript:"
+                    class="types type-title hover"
                     v-for="(item, index) in type_1"
                     :key="index"
+                    @click="selectType_1(item)"
                 >{{item}}</a>
+                <div class="type-2" v-show="type_2.length">
+                    <a href="javascript:" class="focus">全部</a>
+                    <a
+                        href="javascript:"
+                        v-for="(item, index) in type_2"
+                        :key="index"
+                    >{{type_2[index]}}</a>
+                </div>
             </div>
         </div>
     </div>
@@ -39,24 +53,73 @@ export default {
     name: "place",
     data() {
         return {
-            type_1: [],
             type_2: []
         };
     },
     methods: {
-        getShopType() {
+        setShopType() {
             this.$server.getShopType(this).then(res => {
-                let data = res.data;
+                let type = {},
+                    type_1 = [],
+                    t_1,
+                    data = res.data;
                 data.forEach(item => {
-                    if (this.type_1.indexOf(item.type_1) == -1) {
-                        this.type_1.push(item.type_1);
+                    if (!type_1.includes(item.type_1)) {
+                        type_1.push(item.type_1);
                     }
                 });
+                for (let t of type_1) {
+                    t_1 = [];
+                    data.forEach(item => {
+                        if (item.type_1 == t) {
+                            t_1.push(item.type_2);
+                        }
+                    });
+                    type[t] = t_1;
+                }
+                this.$store.dispatch("setShopType", type);
+                this.$store.dispatch("setShopType_1", type_1);
             });
+        },
+        selectAllType() {
+            this.changeAllType_style();
+        },
+        selectType_1(type, e) {
+            e = e || window.event;
+            this.changeType_1_style(e);
+            let allType = this.$store.getters.shopType,
+                selectType = [];
+            for (let t in allType) {
+                if (t == type) {
+                    selectType = allType[t];
+                }
+            }
+            this.type_2 = selectType;
+        },
+        changeAllType_style(e) {
+            let el = this.$refs["allShop"];
+            el.classList.remove("hover");
+            el.classList.add("focus");
+        },
+        changeType_1_style(e) {
+            this.$refs["allShop"].classList.remove("all-shop");
+            this.$refs["allShop"].classList.remove("focus");
+            this.$refs["allShop"].classList.add("hover");
+            e.path[1].childNodes.forEach(item => {
+                item.classList.remove("active");
+            });
+            e.target.classList.add("active");
+        }
+    },
+    computed: {
+        type_1() {
+            return this.$store.getters.shopType_1;
         }
     },
     created() {
-        this.getShopType();
+        if (!this.$store.getters.shopType) {
+            this.setShopType();
+        }
     }
 };
 </script>
@@ -159,6 +222,11 @@ export default {
         .type-title {
             padding: 0 10px;
             margin-right: 8px;
+            &.focus {
+                color: #fff;
+                background-color: #0089dc;
+                border-radius: 3px;
+            }
         }
         .excavator-filter {
             line-height: 26px;
@@ -174,7 +242,7 @@ export default {
                 display: inline-block;
                 margin: 5px 6px;
             }
-            .types:hover {
+            .hover:hover {
                 background-color: #f6f6f6;
                 border-radius: 3px;
             }
@@ -189,12 +257,37 @@ export default {
                 height: 38px;
             }
         }
+        .type-title.active {
+            line-height: 36px;
+            background-color: #f6f6f6;
+            border-radius: 0;
+            margin: 0;
+            padding: 0 16px;
+            height: 38px;
+        }
         .excavator-filter-name {
             position: absolute;
             top: 13px;
             left: 10px;
             font-size: 14px;
             color: #999999;
+        }
+        .type-2 {
+            background-color: #f6f6f6;
+            padding: 6px 0;
+            box-sizing: border-box;
+            a {
+                white-space: nowrap;
+                display: inline-block;
+                margin: 5px 6px;
+                padding: 0 10px;
+            }
+
+            .focus {
+                color: #fff;
+                background-color: #0089dc;
+                border-radius: 3px;
+            }
         }
     }
 }

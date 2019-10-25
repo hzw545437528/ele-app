@@ -12,37 +12,17 @@ server.getVerifyCode = function (_this: any): void {
 }
 
 //登录
-server.login = function (_this: any, phone: string, code: string): void {
-    _this.$axios
-        .post("/api/login", {
-            phone: phone,
-            verfiyCode: code
-        })
-        .then((res: any) => {
-            let data = res.data;
-            if (data.code == 0) {
-                _this.$message({
-                    message: data.msg,
-                    type: "error"
-                });
-            } else if (data.code == 1) {
-                _this.$message({
-                    message: data.msg,
-                    type: "success"
-                });
-
-                localStorage.setItem(
-                    "login_user",
-                    data.user
-                );
-                _this.$router.push("/");
-            } else if (data.code == -1) {
-                _this.$message({
-                    message: data.msg,
-                    type: "warning"
-                });
-            }
-        });
+server.login = function (_this: any, phone: string, code: string) {
+    return new Promise((resolve, reject) => {
+        _this.$axios
+            .post("/api/login", {
+                phone: phone,
+                verfiyCode: code
+            })
+            .then((res: any) => {
+                resolve(res);
+            });
+    })
 }
 
 server.getShopType = function (_this: any, type: Object = {}) {

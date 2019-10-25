@@ -128,11 +128,30 @@ export default class Login extends Vue {
         } else if (_this.codeData.value != _this.verifyCode) {
             _this.codeData.error = "验证码错误";
         } else {
-            _this.$server.login(
-                _this,
-                _this.phoneData.value,
-                _this.codeData.value
-            );
+            _this.$server
+                .login(_this, _this.phoneData.value, _this.codeData.value)
+                .then((res: any) => {
+                    let data = res.data;
+                    if (data.code == 0) {
+                        _this.$message({
+                            message: data.msg,
+                            type: "error"
+                        });
+                    } else if (data.code == 1) {
+                        _this.$message({
+                            message: data.msg,
+                            type: "success"
+                        });
+
+                        localStorage.setItem("login_user", data.user);
+                        _this.$router.push("/");
+                    } else if (data.code == -1) {
+                        _this.$message({
+                            message: data.msg,
+                            type: "warning"
+                        });
+                    }
+                });
         }
     }
 }
