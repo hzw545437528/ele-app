@@ -238,9 +238,9 @@ export default {
             .code-card {
                 display: none;
                 position: absolute;
-                left: -140px;
+                left: -150px;
                 top: -150px;
-                width: 120px;
+
                 height: 180px;
                 background: #fff;
                 box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
@@ -272,7 +272,7 @@ export default {
 
         .QR-code::before {
             @include trianglereverse;
-            left: 140px;
+            left: 150px;
             top: 160px;
         }
     }
