@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueRouter, {RouterOptions} from 'vue-router'
+import VueRouter, { RouterOptions } from 'vue-router'
 
 Vue.use(VueRouter)
 
@@ -23,7 +23,7 @@ const routes = [
             },
         ]
     },
-  
+
     {
         path: '/login',
         name: 'login',
@@ -35,11 +35,11 @@ const routes = [
 ]
 
 const router: any = new VueRouter(({
-  routes
+    routes
 } as RouterOptions))
 
 router.beforeEach((to: any, from: any, next: any) => {
-    const isLogin = localStorage.ele_login ? true : false;
+    const isLogin = localStorage.login_user ? true : false;
     let path = ['/login', '/index', '/place']
     if (path.includes(to.path)) {
         next();

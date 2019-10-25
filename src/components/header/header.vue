@@ -43,10 +43,10 @@
                         <i class="el-icon-location-outline"></i>
                         我的地址
                     </router-link>
-                    <router-link to="/login" class="logout">
+                    <a @click="logout" class="logout">
                         <i class="el-icon-switch-button"></i>
                         退出登录
-                    </router-link>
+                    </a>
                 </div>
             </li>
             <router-link v-else to="/login" tag="li">
@@ -80,11 +80,10 @@ export default {
             this.$refs[ref].classList.remove("show");
         },
         logout() {
-            localStorage.removeItem("ele_login");
+            localStorage.removeItem("login_user");
+            this.$store.dispatch("setUser", "登录/注册");
+            this.$router.push("/login");
         }
-    },
-    beforeDestroy() {
-        this.logout();
     }
 };
 </script>
@@ -187,7 +186,7 @@ export default {
     .QR-code {
         top: 55px;
         left: 10px;
-        width: 180px;
+
         height: 233.6px;
         padding: 3px 10px;
         color: #000000;

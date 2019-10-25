@@ -14,23 +14,24 @@ import Header from "../components/header/header.vue";
 export default {
     data() {
         return {
-            user: "登陆/注册",
             isLogin: false
         };
     },
-    methods: {
-        getUser() {
-            this.user = localStorage["ele_login"]
-                ? localStorage["ele_login"]
-                : this.user;
+    methods: {},
+    computed: {
+        user() {
+            return this.$store.getters.user;
         }
     },
     components: {
         Header
     },
     created() {
-        this.getUser();
-        this.isLogin = localStorage["ele_login"] ? true : false;
+        let user = localStorage.login_user
+            ? localStorage.login_user
+            : "登录/注册";
+        this.$store.dispatch("setUser", user);
+        this.isLogin = localStorage.login_user ? true : false;
     }
 };
 </script>
