@@ -36,7 +36,14 @@
                     :key="index"
                     @click="selectType_1(item)"
                 >{{item}}</a>
-                <div class="type-2">111</div>
+                <div class="type-2" v-show="type_2.length">
+                    <a href="javascript:" class="focus">全部</a>
+                    <a
+                        href="javascript:"
+                        v-for="(item, index) in type_2"
+                        :key="index"
+                    >{{type_2[index]}}</a>
+                </div>
             </div>
         </div>
     </div>
@@ -87,6 +94,7 @@ export default {
                     selectType = allType[t];
                 }
             }
+            this.type_2 = selectType;
         },
         changeAllType_style(e) {
             let el = this.$refs["allShop"];
@@ -267,6 +275,19 @@ export default {
         .type-2 {
             background-color: #f6f6f6;
             padding: 6px 0;
+            box-sizing: border-box;
+            a {
+                white-space: nowrap;
+                display: inline-block;
+                margin: 5px 6px;
+                padding: 0 10px;
+            }
+
+            .focus {
+                color: #fff;
+                background-color: #0089dc;
+                border-radius: 3px;
+            }
         }
     }
 }
