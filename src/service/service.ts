@@ -1,14 +1,13 @@
 const server: any = {}
 
 //获取验证码
-server.getVerifyCode = function (_this: any): void {
-    _this.$axios.get("/api/getVerifyCode").then((res: any) => {
-        _this.verifyCode = res.data;
-        _this.$message({
-            message: "验证码: " + _this.verifyCode,
-            type: "success"
+server.getVerifyCode = function (_this: any) {
+    return new Promise((resolve, reject) => {
+        _this.$axios.get("/api/getVerifyCode").then((res: any) => {
+            console.log(res);
+            resolve(res);
         });
-    });
+    })
 }
 
 //登录

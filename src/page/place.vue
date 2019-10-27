@@ -37,7 +37,7 @@
                     @click="selectType_1(item)"
                 >{{item}}</a>
                 <div class="type-2" v-show="type_2.length">
-                    <a href="javascript:" class="focus">全部</a>
+                    <a href="javascript:" class="focus" ref="allType" @click="selectAllType_2">全部</a>
                     <a
                         href="javascript:"
                         v-for="(item, index) in type_2"
@@ -84,6 +84,9 @@ export default {
         selectAllType() {
             this.changeAllType_style();
         },
+        selectAllType_2() {
+            this.changeAllType_2_style();
+        },
         selectType_1(type, e) {
             e = e || window.event;
             this.changeType_1_style(e);
@@ -99,6 +102,10 @@ export default {
         changeAllType_style(e) {
             let el = this.$refs["allShop"];
             el.classList.remove("hover");
+            el.classList.add("focus");
+        },
+        changeAllType_2_style(e) {
+            let el = this.$refs["allType"];
             el.classList.add("focus");
         },
         changeType_1_style(e) {
