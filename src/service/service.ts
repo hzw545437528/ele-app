@@ -24,10 +24,24 @@ server.login = function (_this: any, phone: string, code: string) {
     })
 }
 
+//获取商店类别
 server.getShopType = function (_this: any, type: Object = {}) {
     return new Promise((resolve, reject) => {
         _this.$axios('/api/getShopType').then((res: any) => {
             resolve(res)
+        })
+    })
+}
+
+//获取商店简介
+server.getShops = function (_this: any, type: Object, page: Number = 0) {
+    return new Promise((resovle, reject) => {
+        let params = {
+            type: type,
+            page: page
+        }
+        _this.$axios.get('/api/getShops', { params: params }).then((res: any) => {
+            resovle(res)
         })
     })
 }

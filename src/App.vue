@@ -9,7 +9,7 @@
 
 #app {
     width: $width;
-    height: $height;
+    background: #f7f7f7;
 
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

@@ -42,6 +42,7 @@ export default {
 @import "../style/mixin.scss";
 #index {
     position: relative;
+
     .container {
         margin-right: 35px;
     }
@@ -49,7 +50,7 @@ export default {
         height: 60px;
         line-height: 60px;
         background: #1e89e0;
-        position: relative; 
+        position: relative;
     }
 
     .right-bar {
