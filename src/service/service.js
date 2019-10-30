@@ -41,5 +41,23 @@ server.getShops = function (_this, type, page = 0) {
         });
     });
 };
+//获取商店展示图片
+server.getShopImg = function (_this, filePath) {
+    return new Promise((resolve, reject) => {
+        _this.$axios('api/getShopImage', { params: { path: filePath }, responseType: 'arraybuffer' }).then((res) => {
+            return 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+        }).then((res) => {
+            resolve(res);
+        });
+    });
+};
+//获取商家赔或保等提供
+server.getProvideIntroduce = function (_this, name) {
+    return new Promise((resolve, reject) => {
+        _this.$axios('/api/getProvideIntroduce', { params: { name: name } }).then((res) => {
+            resolve(res);
+        });
+    });
+};
 export default server;
 //# sourceMappingURL=service.js.map
