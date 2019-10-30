@@ -54,5 +54,25 @@ server.getOrders = function (_this: any) {
         })
     })
 }
+//获取商店展示图片
+server.getShopImg = function (_this: any, filePath: String) {
+    return new Promise((resolve, reject) => {
+        _this.$axios('api/getShopImage', { params: { path: filePath }, responseType: 'arraybuffer' }).then((res: any) => {
+            return 'data:image/png;base64,' + btoa(
+                new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+            );
+        }).then((res: any) => {
+            resolve(res)
+        })
+    })
+}
 
+//获取商家赔或保等提供
+server.getProvideIntroduce = function (_this: any, name: String) {
+    return new Promise((resolve, reject) => {
+        _this.$axios('/api/getProvideIntroduce', { params: { name: name } }).then((res: any) => {
+            resolve(res)
+        })
+    })
+}
 export default server
