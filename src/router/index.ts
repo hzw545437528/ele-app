@@ -21,9 +21,20 @@ const routes = [
                 name: 'place',
                 component: () => import('../page/place.vue')
             },
+            {
+                path: '/profile/order',
+                name: 'order',
+                component: () => import('../page/order.vue'),
+                children: [
+                    {
+                        path:'/profile/order',
+                        name:'order',
+                        component: () => import('../page/recentOrder.vue')
+                    }
+                ]
+            },
         ]
     },
-
     {
         path: '/login',
         name: 'login',

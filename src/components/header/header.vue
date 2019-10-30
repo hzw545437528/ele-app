@@ -66,7 +66,7 @@ export default {
         return {
             navTitle: [
                 { title: "首页", href: "/place" },
-                { title: "我的订单", href: "/order" },
+                { title: "我的订单", href: "/profile/order" },
                 { title: "加盟合作", href: "/cooperation" },
                 { title: "我的客服", href: "/service" }
             ]

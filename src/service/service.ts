@@ -46,4 +46,13 @@ server.getShops = function (_this: any, type: Object, page: Number = 0) {
     })
 }
 
+//获取订单列表
+server.getOrders = function (_this: any) {
+    return new Promise((resovle, reject) => {
+        _this.$axios.get('/api/getOrders').then((res: any) => {
+            resovle(res)
+        })
+    })
+}
+
 export default server

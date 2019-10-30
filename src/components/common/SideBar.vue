@@ -324,7 +324,7 @@ export default {
         font-size: 16px;
         color: #999;
         padding: 5px 10px;
-        height: 25px;
+        height: 30px;
         margin-bottom: 10px;
         border-bottom: 1px solid #ddd;
 
