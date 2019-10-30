@@ -66,5 +66,6 @@ server.getProvideIntroduce = function (_this, name) {
             resolve(res);
         });
     });
-};export default server;
+};
+export default server;
 //# sourceMappingURL=service.js.map
