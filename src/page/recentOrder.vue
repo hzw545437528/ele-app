@@ -66,8 +66,8 @@ export default {
     },
     mounted(){
         this.getOrders(),
-        this.orderMenu(str),
-        this.orderNum(str)
+        this.orderMenu(),
+        this.orderNum()
     },
     methods:{ 
         getOrders() {
