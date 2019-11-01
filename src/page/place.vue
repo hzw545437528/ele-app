@@ -1,22 +1,5 @@
 <template>
     <div id="place">
-        <header class="header">
-            <!-- 位置展示及搜索框 -->
-            <div class="location">
-                <span>当前位置</span>
-                <span>
-                    <router-link to="/place">新大陆科技园</router-link>
-                </span>
-                <span>
-                    <a href="javascript:;">[切换地址]</a>
-                </span>
-            </div>
-            <div class="place-search">
-                <input type="text" placeholder="搜索商家,美食..." />
-                <i class="el-icon-search"></i>
-            </div>
-        </header>
-
         <div class="to-take">
             <div class="img">
                 <img src="../images/takeout.408a87.png" alt />
@@ -71,6 +54,7 @@
                 :key="index"
                 @mouseenter="showProfile(index)"
                 @mouseleave="hideProfile(index)"
+                @click="getShopInfo(item)"
             >
                 <div class="logo">
                     <img :src="shopsImage[item.img]" :alt="item.shop_name" />
@@ -283,7 +267,6 @@ export default {
                 } else {
                     this.hasMore = true;
                 }
-                console.log(this.hasMore);
                 if (!this.page) {
                     this.shopData = res.data;
                     this.shopData.forEach(item => {
@@ -382,6 +365,19 @@ export default {
                 str = "该商家支持开发票，请在下单时填写好发票抬头";
             }
             return str;
+        },
+        //请求商家详细
+        getShopInfo(item) {
+            console.log(item);
+            let routeData = this.$router.resolve({
+                name: "shop",
+                params: {
+                    name: item.shop_name,
+                    id: item._id
+                }
+            });
+
+            window.open(routeData.href, "_blank");
         }
     },
     computed: {
@@ -400,12 +396,6 @@ export default {
 
 <style lang="scss">
 @import "../style/mixin.scss";
-
-@mixin search_marin_padding {
-    margin: 4px 0;
-    padding: 0 8px;
-    line-height: 24px;
-}
 
 @mixin shop-profile-show {
     position: absolute;
@@ -426,65 +416,6 @@ export default {
 #place {
     width: 1180px;
     margin: 0 auto;
-
-    .header {
-        @include flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 53.6px;
-
-        .location {
-            font-size: 12px;
-            span {
-                display: inline-block;
-                margin-right: 6px;
-                line-height: 53.6px;
-            }
-
-            & span:nth-child(1) {
-                color: #999999;
-            }
-            & span:nth-child(2) {
-                color: #333333;
-            }
-            & span:nth-child(3) a {
-                color: #0089dc;
-            }
-        }
-
-        .place-search {
-            margin: 10px 0;
-            position: relative;
-            height: 32px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            background: #fff;
-            input {
-                @include search_marin_padding;
-                width: 236px;
-                outline: none;
-                border: none;
-                transition: width 0.3s ease-in-out;
-            }
-            input:focus {
-                width: 306px;
-            }
-            i {
-                display: inline-block;
-                @include search_marin_padding;
-                width: 46px;
-                box-sizing: border-box;
-                text-align: center;
-                font-size: 20px;
-                vertical-align: middle;
-                color: #999;
-            }
-            i:hover {
-                color: #0089dc;
-                cursor: pointer;
-            }
-        }
-    }
 
     .to-take {
         text-align: right;

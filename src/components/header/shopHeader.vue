@@ -1,9 +1,8 @@
 <template>
-    <div id="header" :class="{'shop-page': siShopPage}">
+    <div id="header">
         <ul class="nav">
             <router-link to="/" replace class="logo">
-                <img v-if="isShopPage" src="../../images/shop_header_icon_20191031171414.png" alt />
-                <img v-else src="../../images/index_header_logo.png" alt />
+                <img src="../../images/index_header_logo.png" alt />
             </router-link>
             <router-link :to="{ name:'place', params:{searchVal: ''} }" replace tag="li">首页</router-link>
             <router-link
@@ -62,10 +61,7 @@
 export default {
     props: {
         user: String,
-        isLogin: Boolean,
-        isShopPage: {
-            type: Boolean
-        }
+        isLogin: Boolean
     },
     data() {
         return {
@@ -250,8 +246,5 @@ export default {
         flex-direction: column;
         justify-content: space-around;
     }
-}
-
-.shop-page {
 }
 </style>

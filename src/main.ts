@@ -15,8 +15,10 @@ Vue.prototype.$axios = axios
 Vue.prototype.$server = server
 Vue.use(elementUi)
 
-new Vue({
+const vue = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+
+export default vue

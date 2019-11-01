@@ -10,6 +10,12 @@ const mutations: MutationTree<any> = {
     },
     SET_SHOPTYPE_1(state: any, shopType_1: any): void {
         state.shopType_1 = shopType_1
+    },
+    SET_NAVNAME(state: any, navName: any): void {
+        state.navName = navName
+    },
+    SET_SHOWLOCATION(state: any, showLocation: any): void {
+        state.showLocation = showLocation
     }
 }
 

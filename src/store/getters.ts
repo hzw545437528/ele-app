@@ -9,6 +9,12 @@ const getters: GetterTree<any, any> = {
     },
     shopType_1(state: any): any {
         return state.shopType_1
+    },
+    navName(state: any): any {
+        return state.navName
+    },
+    showLocation(state: any): any {
+        return state.showLocation
     }
 }
 
