@@ -13,10 +13,9 @@ Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
 Vue.prototype.$server = server;
 Vue.use(elementUi);
-const vue = new Vue({
+new Vue({
     router,
     store,
     render: h => h(App)
 }).$mount('#app');
-export default vue;
 //# sourceMappingURL=main.js.map

@@ -7,12 +7,6 @@ const getters = {
     },
     shopType_1(state) {
         return state.shopType_1;
-    },
-    navName(state) {
-        return state.navName;
-    },
-    showLocation(state) {
-        return state.showLocation;
     }
 };
 export default getters;

@@ -7,12 +7,6 @@ const actions = {
     },
     setShopType_1({ commit }, shopType_1) {
         commit("SET_SHOPTYPE_1", shopType_1);
-    },
-    setNavName({ commit }, navName) {
-        commit("SET_NAVNAME", navName);
-    },
-    setShowLocation({ commit }, showLocation) {
-        commit("SET_SHOWLOCATION", showLocation);
     }
 };
 export default actions;
