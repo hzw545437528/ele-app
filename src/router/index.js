@@ -1,6 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import vue from '../main';
 Vue.use(VueRouter);
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch((err) => err);
+};
 const routes = [
     {
         path: '/',
@@ -18,6 +23,16 @@ const routes = [
                 path: '/place',
                 name: 'place',
                 component: () => import('../page/place.vue')
+            },
+            {
+                path: '/search/:searchVal',
+                name: 'search',
+                component: () => import('../page/search.vue')
+            },
+            {
+                path: '/shop/:name/:id',
+                name: 'shop',
+                component: () => import('../page/shopInfo.vue')
             },
             {
                 path: '/profile/order',
@@ -54,6 +69,15 @@ router.beforeEach((to, from, next) => {
     else {
         isLogin ? next() : next('/login');
     }
+});
+router.beforeResolve((to, from, next) => {
+    if (to.name == 'shop') {
+        vue.$store.dispatch('setShowLocation', false);
+    }
+    else {
+        vue.$store.dispatch('setShowLocation', true);
+    }
+    next();
 });
 export default router;
 //# sourceMappingURL=index.js.map
