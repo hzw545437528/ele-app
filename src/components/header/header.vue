@@ -30,7 +30,7 @@
             <li @mouseenter="enter('user-nav')" @mouseleave="leave('user-nav')" v-if="isLogin">
                 <div>
                     <span>{{user}}</span>
-                    <i class="el-icon-arrow-down"></i>
+                    <i class="el-icon-arrow-down header-drop-down"></i>
                 </div>
                 <div class="card user-nav" ref="user-nav">
                     <router-link to>
@@ -96,7 +96,7 @@ export default {
 @import "../../style/mixin.scss";
 #header {
     @include flex;
-    justify-content: space-around;
+    justify-content: space-between;
     width: 1180px;
     margin: 0 auto;
     height: $ext;
@@ -253,5 +253,13 @@ export default {
 }
 
 .shop-page {
+    .nav {
+        li:hover {
+            background-color: rgba(0, 0, 0, 0.1) !important;
+        }
+    }
+    .header-drop-down {
+        background: rgba(0, 0, 0, 0.1) !important;
+    }
 }
 </style>

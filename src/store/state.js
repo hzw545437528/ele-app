@@ -3,7 +3,8 @@ const state = {
     shopType: null,
     shopType_1: null,
     navName: "",
-    showLocation: true
+    showLocation: true,
+    shoplayout: 'grid'
 };
 export default state;
 //# sourceMappingURL=state.js.map

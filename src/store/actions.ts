@@ -15,6 +15,9 @@ const actions: ActionTree<any, any> = {
     },
     setShowLocation({ commit }, showLocation: any) {
         commit("SET_SHOWLOCATION", showLocation)
+    },
+    setShoplayout({ commit }, shoplayout: any) {
+        commit("SET_SHOPLAYOUT", shoplayout)
     }
 }
 export default actions;

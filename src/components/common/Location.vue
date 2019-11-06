@@ -13,14 +13,12 @@
             </span>
             <span v-if="navName">{{navName}}</span>
         </div>
-        <div class="place-search" v-if="showSearch">
-            <input type="text" placeholder="搜索商家,美食..." v-model="searchVal" autocomplete />
-            <i class="el-icon-search" @click="search"></i>
-        </div>
+        <searchInput v-if="showSearch" @search="search" :searchVal.sync="searchVal"></searchInput>
     </div>
 </template>
 
 <script>
+import searchInput from "./searchInput";
 export default {
     props: {
         navName: String,
@@ -38,7 +36,7 @@ export default {
             if (!this.searchVal) {
                 return;
             }
-            this.$router.push({
+            this.$router.replace({
                 name: "search",
                 params: { searchVal: this.searchVal }
             });
@@ -66,6 +64,9 @@ export default {
         // if (arr[2]) {
 
         // }
+    },
+    components: {
+        searchInput
     }
 };
 </script>

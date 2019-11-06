@@ -15,6 +15,9 @@ const getters: GetterTree<any, any> = {
     },
     showLocation(state: any): any {
         return state.showLocation
+    },
+    shoplayout(state: any): any {
+        return state.shoplayout
     }
 }
 

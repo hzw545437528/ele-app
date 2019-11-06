@@ -82,6 +82,8 @@ export default {
 #search {
     margin-top: 15px;
     text-align: left;
+    width: 1180px;
+    margin: 0 auto;
 
     .shop-wrap {
         margin: 0;

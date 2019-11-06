@@ -32,7 +32,22 @@ const routes = [
             {
                 path: '/shop/:name/:id',
                 name: 'shop',
-                component: () => import('../page/shopInfo.vue')
+                component: () => import('../page/shopInfo.vue'),
+                children: [
+                    {
+                        path: '/shop/:name/:id',
+                        name: 'shop/goods',
+                        component: () => import('../components/shopInfo/goods.vue')
+                    },
+                    {
+                        path: '/shop/:name/:id/rate',
+                        name: 'shop/rate'
+                    },
+                    {
+                        path: '/shop/:name/:id/info',
+                        name: 'shop/info',
+                    }
+                ]
             },
             {
                 path: '/order',
@@ -76,7 +91,7 @@ router.beforeEach((to, from, next) => {
     }
 });
 router.beforeResolve((to, from, next) => {
-    if (to.name == 'shop') {
+    if (to.name.includes('shop')) {
         vue.$store.dispatch('setShowLocation', false);
     }
     else {

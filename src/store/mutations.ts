@@ -16,6 +16,9 @@ const mutations: MutationTree<any> = {
     },
     SET_SHOWLOCATION(state: any, showLocation: any): void {
         state.showLocation = showLocation
+    },
+    SET_SHOPLAYOUT(state: any, shoplayout: any): void {
+        state.shoplayout = shoplayout
     }
 }
 
