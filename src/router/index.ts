@@ -38,14 +38,19 @@ const routes = [
                 component: () => import('../page/shopInfo.vue')
             },
             {
-                path: '/profile/order',
-                name: 'order',
+                path: '/order',
+                redirect: '/profile/order',
                 component: () => import('../page/order.vue'),
                 children: [
                     {
                         path: '/profile/order',
                         name: 'order',
                         component: () => import('../page/recentOrder.vue')
+                    },
+                    {
+                        path: '/profile/order/id/:orderId',
+                        name: 'orderDetail',
+                        component: () => import('../page/orderDetail.vue')
                     }
                 ]
             },

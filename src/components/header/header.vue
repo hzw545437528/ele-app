@@ -1,5 +1,5 @@
 <template>
-    <div id="header" :class="{'shop-page': siShopPage}">
+    <div id="header" :class="{'shop-page': isShopPage}">
         <ul class="nav">
             <router-link to="/" replace class="logo">
                 <img v-if="isShopPage" src="../../images/shop_header_icon_20191031171414.png" alt />
@@ -70,7 +70,7 @@ export default {
     data() {
         return {
             navTitle: [
-                { title: "我的订单", href: "/profile/order" },
+                { title: "我的订单", href: "/order" },
                 { title: "加盟合作", href: "/cooperation" },
                 { title: "我的客服", href: "/service" }
             ]

@@ -54,6 +54,28 @@ server.getOrders = function (_this: any) {
         })
     })
 }
+//根据订单号获取订单
+server.getOrderById = function (_this:any, orderId:String) {
+    return new Promise((resovle, reject) => {
+        let params = {
+            orderId: orderId
+        };
+        _this.$axios.get('/api/getOrderById', { params: params }).then((res:any) => {
+            resovle(res);
+        })
+    })
+}
+//根据商店名获取商店
+server.getShopByName = function (_this:any, shopName:String) {
+    return new Promise((resovle, reject) => {
+        let params = {
+            shopName: shopName
+        };
+        _this.$axios.get('/api/getShopByName', { params: params }).then((res:any) => {
+            resovle(res);
+        })
+    })
+}
 //获取商店展示图片
 server.getShopImg = function (_this: any, filePath: String) {
     return new Promise((resolve, reject) => {

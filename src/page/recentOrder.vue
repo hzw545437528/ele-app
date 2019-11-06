@@ -19,7 +19,7 @@
                 <tbody>
                     <tr class="order-profile" v-for="(item, index) in orderData" :key="index">
                         <td>{{item.order_time}}</td>
-                        <td><img src="../images/5d481659f8dedccfec8703126fbcepng.webp" alt /></td>
+                        <td><img :src="shopsImage[item.img]" :alt="item.shop_name" /></td>
                         <td>
                             <p>
                                 <span v-for="(i, index) in orderMenu(item.order_menu)" :key="index"">
@@ -34,21 +34,21 @@
                         <td>{{item.state}}</td>
                         <td>
                             <div class="order-detail">
-                                <a href="/profile/order/id">订单详情</a>
+                                <router-link :to="{name: 'orderDetail',params: {orderId: item.order_id} }">订单详情</router-link>
                             </div>
                             <div v-if="(item.state=='等待评价')">
                                 <div class="display">
                                     <div class="order-appraise">
-                                        <a href="/profile/order/rate">评价订单</a>
+                                        <router-link to="/profile/order/rate">评价订单</router-link>
                                         <i class="el-icon-arrow-down"></i>
                                     </div>
                                     <div class="once-more1">
-                                        <a href="/profile/order/id">再来一份</a>
+                                        <router-link to="/profile/order/id">再来一份</router-link>
                                     </div> 
                                 </div>
                             </div>  
                             <div class="once-more2" v-else>
-                                <a href="/profile/order/id">再来一份</a>
+                                <router-link to="/profile/order/id">再来一份</router-link>
                             </div>    
                         </td>
                     </tr>
@@ -62,9 +62,11 @@ export default {
     data() {
         return {
             orderData:[],
+            shopsImage: {},
+            shopData:[]
         }
     },
-    mounted(){
+    mounted() {
         this.getOrders(),
         this.orderMenu(),
         this.orderNum()
@@ -75,9 +77,15 @@ export default {
                 .getOrders(this)
                 .then(res => {
                     res.data.forEach(item => {
-                        this.orderData.push(item);
+                        this.$server.getShopByName(this,item.shop_name).then(res => {
+                            this.shopData = res.data;
+                            item.img = this.shopData[0].img;
+                            this.orderData.push(item);
+                            this.getShopImg(item.img);
+                        });
                     });
                 });
+            
         },
         orderMenu(str) {
             let arr = [];
@@ -92,7 +100,12 @@ export default {
                 arr = str.split(",");
             }
             return arr;
-        }
+        },
+        getShopImg(imgPath) {
+            this.$server.getShopImg(this, imgPath).then(res => {
+                this.$set(this.shopsImage, imgPath, res);
+            });
+        },
     }
 }
 </script>
@@ -175,6 +188,7 @@ export default {
                     img {
                         width:70px;
                         height:70px;
+                        border-radius:45px;
                     }
                 }
                 & td:nth-child(3) {
