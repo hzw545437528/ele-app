@@ -13,6 +13,9 @@ const mutations = {
     },
     SET_SHOWLOCATION(state, showLocation) {
         state.showLocation = showLocation;
+    },
+    SET_SHOPLAYOUT(state, shoplayout) {
+        state.shoplayout = shoplayout;
     }
 };
 export default mutations;

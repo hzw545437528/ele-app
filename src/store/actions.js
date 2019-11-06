@@ -13,6 +13,9 @@ const actions = {
     },
     setShowLocation({ commit }, showLocation) {
         commit("SET_SHOWLOCATION", showLocation);
+    },
+    setShoplayout({ commit }, shoplayout) {
+        commit("SET_SHOPLAYOUT", shoplayout);
     }
 };
 export default actions;

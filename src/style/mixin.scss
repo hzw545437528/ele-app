@@ -1,4 +1,3 @@
-
 $width: 100%;
 $height: 100%;
 $ext: inherit;
@@ -32,7 +31,7 @@ $f: #ffffff;
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-color:transparent transparent #747070;
+    border-color: transparent transparent #747070;
     transform: rotateZ(90deg);
 }
 
@@ -43,6 +42,12 @@ $f: #ffffff;
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-color:transparent transparent #ffffff;
+    border-color: transparent transparent #ffffff;
     transform: rotateZ(90deg);
+}
+
+@mixin ui-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

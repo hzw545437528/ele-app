@@ -13,6 +13,9 @@ const getters = {
     },
     showLocation(state) {
         return state.showLocation;
+    },
+    shoplayout(state) {
+        return state.shoplayout;
     }
 };
 export default getters;

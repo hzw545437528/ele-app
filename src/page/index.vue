@@ -1,7 +1,7 @@
 <template>
     <div id="index">
-        <div class="container">
-            <div class="header-wrap" :class="{shopInfoHeader: isShopInfoPage}">
+        <div class="container" :class="{shopInfoContainer: isShopInfoPage}">
+            <div class="header-wrap">
                 <Header :user="user" :isLogin="isLogin" :isShopPage="isShopInfoPage"></Header>
             </div>
 
@@ -11,8 +11,9 @@
             <div class="content">
                 <router-view></router-view>
             </div>
+            <footer class="footer">123123</footer>
         </div>
-        <SideBar></SideBar>
+        <SideBar v-if="!showSideBar"></SideBar>
     </div>
 </template>
 <script>
@@ -23,7 +24,8 @@ export default {
     data() {
         return {
             isLogin: false,
-            showSearch: true
+            showSearch: false,
+            showSideBar: true
         };
     },
     methods: {},
@@ -48,6 +50,7 @@ export default {
             if (path.includes(to.name)) {
                 return (this.showSearch = true);
             }
+
             this.showSearch = false;
         }
     },
@@ -66,6 +69,12 @@ export default {
         if (pathName == "search") {
             this.$store.dispatch("setNavName", "搜索结果");
         }
+        let path = ["place", "search"];
+        if (path.includes(pathName)) {
+            return (this.showSearch = true);
+        }
+
+        this.showSearch = false;
     }
 };
 </script>
@@ -90,11 +99,6 @@ export default {
         margin: 0 auto;
     }
 
-    .content {
-        width: 1180px;
-        margin: 0 auto;
-    }
-
     .right-bar {
         position: fixed;
         top: 0;
@@ -103,15 +107,22 @@ export default {
         height: 100vh;
         background: #747070;
     }
+    .shopInfoContainer {
+        margin: 0;
+        .header-wrap {
+            position: absolute;
+            width: 100%;
+            height: 48px;
+            line-height: 48px;
+            background-color: #000;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: #fff;
+        }
+    }
+    .footer {
+        @include center;
 
-    .shopInfoHeader {
-        position: absolute;
-        width: 100%;
-        height: 48px;
-        line-height: 48px;
-        background-color: #000;
-        background-color: rgba(0, 0, 0, 0.4);
-        color: #fff;
+        height: 200px;
     }
 }
 </style>

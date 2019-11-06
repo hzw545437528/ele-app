@@ -7,6 +7,8 @@ const state: any = {
     shopType_1: null,
 
     navName: "",
-    showLocation: true
+    showLocation: true,
+
+    shoplayout: 'grid'
 }
 export default state;
