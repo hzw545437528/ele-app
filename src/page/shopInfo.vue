@@ -3,22 +3,26 @@
         <div class="shop-header">
             <div class="header-container">
                 <div class="header-left">
-                    <img src="../images/63d2494016e3ce1feb74241ddbfb7jpeg.jpeg" alt="叫了个炸鸡(凯隆店)" />
+                    <img
+                        src="../images/63d2494016e3ce1feb74241ddbfb7jpeg.jpeg"
+                        :alt="shop.shop_name"
+                    />
                     <div class="left-title">
                         <div class="top">
-                            <h1>叫了个炸鸡(凯隆店)</h1>
+                            <h1>{{shop.shop_name}}</h1>
                             <span>预订中，今天 11:00后开始送餐</span>
                         </div>
                         <p>
                             <el-rate
-                                v-model="value5"
+                                v-model="shop.level"
                                 disabled
                                 text-color="#ff9900"
                                 score-template="{value}"
                             ></el-rate>
                             <span>
                                 (
-                                <a href="javascript:" class="rate">490</a>)
+                                <a href="javascript:" class="rate">490</a>
+                                )
                             </span>
                         </p>
                     </div>
@@ -26,7 +30,7 @@
                         <ul>
                             <li class="shop-evaluate">
                                 <div class="evaluate-left">
-                                    <h2 class="font-red-color">4.6</h2>
+                                    <h2 class="font-red-color">{{shop.level}}</h2>
                                     <p>
                                         综合评价
                                         <br />
@@ -80,15 +84,15 @@
                 <div class="header-right">
                     <span>
                         <em>起送价</em>
-                        <em class="shop-server-value">20元</em>
+                        <em class="shop-server-value">{{shopInfo.start_send}}元</em>
                     </span>
                     <span>
                         <em>配送费</em>
-                        <em class="shop-server-value">配送费￥1.4</em>
+                        <em class="shop-server-value">配送费￥{{shop.shop_fee}}</em>
                     </span>
                     <span>
                         <em>平均送达速度</em>
-                        <em class="shop-server-value">50分钟</em>
+                        <em class="shop-server-value">{{shop.distribution_time}}分钟</em>
                     </span>
                 </div>
                 <a href="javascript" class="collect">
@@ -104,7 +108,7 @@
                         <router-link
                             tag="li"
                             :class="{'router-link-active': $route.name =='shop/goods'}"
-                            :to="{name: 'shop/goods', params: {name: $route.params.name,id: $route.params.id}}"
+                            :to="{name: 'shop/goods', params: {name: $route.params.name,id: $route.params.id,goods: shopInfo}}"
                             exact
                         >所有商品</router-link>
                         <router-link
@@ -203,20 +207,24 @@
                 <div class="shop-left">
                     <router-view></router-view>
                 </div>
-                <div class="shop-right">
-                    <h3>商家公告</h3>
-                    <p></p>
-                    <div class="shopbulletin-delivery">
-                        <h4>配送说明：</h4>
-                        <p>配送费￥1.4</p>
+                <div class="right-container">
+                    <div class="shop-right">
+                        <h3>商家公告</h3>
+                        <p>{{shop.introduction}}</p>
+                        <div class="shopbulletin-delivery">
+                            <h4>配送说明：</h4>
+                            <p>配送费￥{{shop.shop_fee}}</p>
+                        </div>
+                        <ul class="shopbulletin-supports">
+                            <li v-for="(item, index) in supports" :key="index">
+                                <template v-if="item">
+                                    <i>{{item}}</i>
+                                    <span>{{provideIntroduce(item)}}</span>
+                                </template>
+                            </li>
+                        </ul>
+                        <a class="shopcomplaint">举报商家</a>
                     </div>
-                    <ul class="shopbulletin-supports">
-                        <li>
-                            <i>保</i>
-                            <span>该商户食品安全已由国泰产险承担，食品安全有保障</span>
-                        </li>
-                    </ul>
-                    <a class="shopcomplaint">举报商家</a>
                 </div>
             </div>
         </div>
@@ -239,7 +247,9 @@ export default {
                 desc: true,
                 asce: false
             },
-            layout: "grid"
+            layout: "grid",
+            shopInfo: {},
+            shop: {}
         };
     },
     methods: {
@@ -253,9 +263,47 @@ export default {
                 this.sortObj[t] = false;
             }
             this.sortObj[type] = true;
+        },
+        provideIntroduce(provide) {
+            let str = "";
+            if (provide == "保") {
+                str = "该商户食品安全已由国泰产险承担，食品安全有保障";
+            } else if (provide == "赔") {
+                str = "商家原因导致订单取消，赔付代金券";
+            } else if (provide == "票") {
+                str = "该商家支持开发票，请在下单时填写好发票抬头";
+            }
+            return str;
+        },
+        //根据id获取商家信息
+        getShopById(id) {
+            this.$server.getShopById(id).then(res => {
+                // console.log(res.data);
+                this.shop = res.data;
+                this.$store.dispatch("setShop", res.data);
+            });
+        },
+        //获取商家详细信息
+        getShopInfo() {
+            this.$server.getShopInfo(this.$route.params.id).then(res => {
+                this.shopInfo = res.data;
+                this.$store.dispatch("setShopInfo", res.data);
+                this.$set(this.$route.params, "goods", res.data.shop_goods);
+                this.$set(
+                    this.$route.params,
+                    "delivery_fee",
+                    this.shop.shop_fee
+                );
+            });
         }
     },
-    computed: {},
+    computed: {
+        supports() {
+            let provide = this.shop.provide || "",
+                arr = provide.split(",");
+            return arr;
+        }
+    },
     watch: {
         layout() {
             this.$store.dispatch("setShoplayout", this.layout);
@@ -266,7 +314,9 @@ export default {
         let str = "/" + arr[1] + "/" + arr[2] + "/" + arr[3];
 
         this.route = str;
-        // console.log(this.route);
+        // console.log(this.route);  created() {
+        this.getShopById(this.$route.params.id);
+        this.getShopInfo();
     }
 };
 </script>
@@ -685,15 +735,17 @@ export default {
         .shop-left {
             flex: 3;
         }
-        .shop-right {
-            max-height: 238px;
+        .right-container {
             flex: 1;
             margin-left: 15px;
             text-align: left;
-            border-radius: 2px 2px 0 0;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
-            color: #333333;
-            background: #ffffff;
+
+            .shop-right {
+                border-radius: 2px 2px 0 0;
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+                color: #333333;
+                background: #ffffff;
+            }
 
             h3 {
                 padding: 0 1em;
@@ -701,7 +753,7 @@ export default {
                 background: #0089dc;
                 line-height: 2.8em;
             }
-            & > p {
+            .shop-right > p {
                 padding: 10px 15px;
             }
 

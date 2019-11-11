@@ -9,6 +9,11 @@ const state: any = {
     navName: "",
     showLocation: true,
 
-    shoplayout: 'grid'
+    shoplayout: 'grid',
+    showMask: false,
+
+    //商家信息
+    shop: {},
+    shopInfo: {}
 }
 export default state;

@@ -13,13 +13,15 @@
             </div>
             <footer class="footer">123123</footer>
         </div>
-        <SideBar v-if="!showSideBar"></SideBar>
+        <SideBar v-if="showSideBar"></SideBar>
+        <Mymask v-if="$store.getters.showMask"></Mymask>
     </div>
 </template>
 <script>
 import Header from "../components/header/header.vue";
 import SideBar from "../components/common/SideBar.vue";
 import Location from "../components/common/Location.vue";
+import Mymask from "../components/common/Mymask";
 export default {
     data() {
         return {
@@ -47,6 +49,7 @@ export default {
             to.name == "search"
                 ? this.$store.dispatch("setNavName", "搜索结果")
                 : 0;
+            this.showSideBar = to.name.includes("shop") ? false : true;
             if (path.includes(to.name)) {
                 return (this.showSearch = true);
             }
@@ -57,7 +60,8 @@ export default {
     components: {
         Header,
         SideBar,
-        Location
+        Location,
+        Mymask
     },
     created() {
         let user = localStorage.login_user
@@ -66,6 +70,9 @@ export default {
         this.$store.dispatch("setUser", user);
         this.isLogin = localStorage.login_user ? true : false;
         let pathName = this.$route.name;
+        if (pathName.includes("shop")) {
+            this.showSideBar = false;
+        }
         if (pathName == "search") {
             this.$store.dispatch("setNavName", "搜索结果");
         }

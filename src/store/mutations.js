@@ -16,6 +16,15 @@ const mutations = {
     },
     SET_SHOPLAYOUT(state, shoplayout) {
         state.shoplayout = shoplayout;
+    },
+    SET_SHOWMASK(state, showMask) {
+        state.showMask = showMask;
+    },
+    SET_SHOPINFO(state, shopInfo) {
+        state.shopInfo = shopInfo;
+    },
+    SET_SHOP(state, shop) {
+        state.shop = shop;
     }
 };
 export default mutations;

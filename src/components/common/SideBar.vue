@@ -17,7 +17,7 @@
                 <div class="toolbar-separator"></div>
                 <router-link to class="toolbar-btn toolbar-cartbtn">
                     <i class="iconfont icon-gouwuche"></i>
-                    <div @click="translateShop('in1','in2')" v-model="showShop">购物车</div>
+                    <div @click="translateShop('in1','in2')">购物车</div>
                 </router-link>
                 <div class="toolbar-separator"></div>
                 <router-link to class="toolbar-btn">
@@ -27,7 +27,7 @@
                         @mouseleave="leave('info')"
                         @click="translateInfo('in1','in2')"
                     >
-                        <i class="iconfont icon-xinfeng" v-model="showInfo"></i>
+                        <i class="iconfont icon-xinfeng"></i>
                         <div class="card" ref="info">
                             <span>我的信息</span>
                         </div>
@@ -311,7 +311,7 @@ export default {
     }
 }
 .tool-bar-content {
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 0;
     height: 100vh;
@@ -334,7 +334,7 @@ export default {
             line-height: 23px;
             color: #333;
             text-decoration: none;
-            float: left;
+            // float: left;
         }
 
         span {

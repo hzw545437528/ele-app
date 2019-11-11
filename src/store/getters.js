@@ -16,6 +16,15 @@ const getters = {
     },
     shoplayout(state) {
         return state.shoplayout;
+    },
+    showMask(state) {
+        return state.showMask;
+    },
+    shopInfo(state) {
+        return state.shopInfo;
+    },
+    shop(state) {
+        return state.shop;
     }
 };
 export default getters;

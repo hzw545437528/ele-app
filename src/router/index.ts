@@ -101,6 +101,7 @@ router.beforeResolve((to: any, from: any, next: any) => {
         vue.$store.dispatch('setShowLocation', false)
     } else {
         vue.$store.dispatch('setShowLocation', true)
+        vue.$store.dispatch('setShopInfo', {})
     }
 
     next()

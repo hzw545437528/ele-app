@@ -1,3 +1,4 @@
+import vue from '../main';
 const server = {};
 //获取验证码
 server.getVerifyCode = function (_this) {
@@ -71,11 +72,31 @@ server.getShopByName = function (_this, shopName) {
         });
     });
 };
+//根据id获取商店
+server.getShopById = function (id) {
+    return new Promise((resovle, reject) => {
+        vue.$axios('/api/getShopById', { params: { id: id } }).then((res) => {
+            resovle(res);
+        });
+    });
+};
 //获取商店展示图片
 server.getShopImg = function (_this, filePath) {
     return new Promise((resolve, reject) => {
         _this.$axios('api/getShopImage', { params: { path: filePath }, responseType: 'arraybuffer' }).then((res) => {
             return 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+        }).then((res) => {
+            resolve(res);
+        });
+    });
+};
+//获取商家信息
+server.getShopInfo = function (shop_id) {
+    return new Promise((resolve) => {
+        vue.$axios.get('/api/getShopInfo', {
+            params: {
+                shop_id: shop_id
+            }
         }).then((res) => {
             resolve(res);
         });

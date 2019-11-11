@@ -16,6 +16,15 @@ const actions = {
     },
     setShoplayout({ commit }, shoplayout) {
         commit("SET_SHOPLAYOUT", shoplayout);
+    },
+    setShowMask({ commit }, showMask) {
+        commit("SET_SHOWMASK", showMask);
+    },
+    setShopInfo({ commit }, shopInfo) {
+        commit("SET_SHOPINFO", shopInfo);
+    },
+    setShop({ commit }, shop) {
+        commit("SET_SHOP", shop);
     }
 };
 export default actions;

@@ -18,6 +18,15 @@ const actions: ActionTree<any, any> = {
     },
     setShoplayout({ commit }, shoplayout: any) {
         commit("SET_SHOPLAYOUT", shoplayout)
+    },
+    setShowMask({ commit }, showMask: Boolean) {
+        commit("SET_SHOWMASK", showMask)
+    },
+    setShopInfo({ commit }, shopInfo: any) {
+        commit("SET_SHOPINFO", shopInfo)
+    },
+    setShop({ commit }, shop: any) {
+        commit("SET_SHOP", shop)
     }
 }
 export default actions;

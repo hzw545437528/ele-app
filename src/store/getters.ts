@@ -18,6 +18,15 @@ const getters: GetterTree<any, any> = {
     },
     shoplayout(state: any): any {
         return state.shoplayout
+    },
+    showMask(state: any): Boolean {
+        return state.showMask
+    },
+    shopInfo(state: any) {
+        return state.shopInfo
+    },
+    shop(state: any) {
+        return state.shop
     }
 }
 

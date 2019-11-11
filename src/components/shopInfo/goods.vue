@@ -23,13 +23,17 @@
                 <div v-for="(shopmenu, index) in shopmenu_nav" :key="index">
                     <h3 class="menutitle" :ref="shopmenu">
                         {{shopmenu}}
-                        <small>大家喜欢吃，才叫真好吃</small>
+                        <small>{{params.goods.type[index].tip}}</small>
                     </h3>
                     <div class="goods-wrap">
                         <ul
                             :class="{'goods-grid':$store.getters.shoplayout=='grid','goods-list':$store.getters.shoplayout=='list'}"
                         >
-                            <li v-for="item in 10" :key="item" class="goods">
+                            <li
+                                v-for="(item, goodsindex) in goods(shopmenu)"
+                                :key="goodsindex"
+                                class="goods"
+                            >
                                 <div class="goods-left">
                                     <img
                                         src="../../images/63d2494016e3ce1feb74241ddbfb7jpeg.jpeg"
@@ -37,18 +41,16 @@
                                     />
                                 </div>
                                 <div class="goods-right">
-                                    <div class="goods-title">叫了个童子鸡+饮料套餐</div>
+                                    <div class="goods-title">{{item.title}}</div>
                                     <p
                                         class="goods-introduce"
                                         @mouseenter="showtip"
                                         @mouseleave="hidetip"
-                                    >所有鸡的底味都有一点点微辣哦 滴辣不沾的宝宝慎拍啊 主要原料：鸡肉</p>
-                                    <span
-                                        class="goodsintroduce-tip"
-                                    >所有鸡的底味都有一点点微辣哦 滴辣不沾的宝宝慎拍啊 主要原料：鸡肉</span>
+                                    >{{item.introduce}}</p>
+                                    <span class="goodsintroduce-tip">{{item.introduce}}</span>
                                     <div class="inco-star">
                                         <el-rate
-                                            v-model="value5"
+                                            v-model="item.level"
                                             disabled
                                             text-color="#ff9900"
                                             score-template="{value}"
@@ -56,15 +58,123 @@
                                         <small>(14)</small>
                                         <small>月售10份</small>
                                     </div>
-                                    <div class="goods-price">￥46.8</div>
+                                    <div class="goods-price">
+                                        ￥
+                                        <span v-if="item.price">{{item.price}}</span>
+                                        <div
+                                            style="display: inline-block"
+                                            v-else-if="item.specification"
+                                        >
+                                            <span>{{getLowestPrice(item.specification)[0]}}</span>
+                                            <small style="margin-left: 5px;color: #888888;">起</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="btn-div">
-                                    <a class="btn">加入购物车</a>
+                                    <a
+                                        href="javascript:"
+                                        class="btn"
+                                        v-if="item.specification"
+                                        @click="showSepc(shopmenu, item.title)"
+                                    >选规格</a>
+                                    <a
+                                        href="javascript:"
+                                        class="btn"
+                                        v-else
+                                        @click="addCarts(item)"
+                                    >加入购物车</a>
+                                </div>
+                                <div
+                                    class="shop-specmenu"
+                                    v-if="item.specification && $store.getters.showMask"
+                                    :ref="shopmenu+item.title"
+                                >
+                                    <div class="shop-specmenu-specs">
+                                        <dl>
+                                            <dt>规格</dt>
+                                            <dd
+                                                @click="selectSpec(index, item.title)"
+                                                :class="{current: goodsSpec.select[index]}"
+                                                v-for="(spec, index) in item.specification"
+                                                :key="index"
+                                            >{{spec.title}}</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="shop-specmenu-infogroup">
+                                        <p>
+                                            已选：
+                                            <span>{{item.specification[goodsSpec.index].title}}</span>
+                                        </p>
+                                        <p class="shop-specmenu-price">
+                                            <span class="yen">￥</span>
+                                            <span
+                                                class="price"
+                                            >{{item.specification[goodsSpec.index].price}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="shop-specmenu-infogroup btns">
+                                        <button class="btn-primary" @click="addCarts">选好了，加入购物车</button>
+                                        <a
+                                            href="javascript:"
+                                            @click="$store.dispatch('setShowMask', false)"
+                                        >不要了</a>
+                                    </div>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="shop-cart">
+            <div class="shop-cartbasket" id="shop_cartbasket" ref="shop_cartbasket">
+                <div>
+                    <div class="cartbasket-head">
+                        <div class="cartbasket-headrow">
+                            购物车
+                            <a href="javascript:" @click="clearCart">[清空]</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="shop-cartbasket-empty" v-if="shopcart.goods.length ==0">
+                    <div class="icon-cart">
+                        <i></i>
+                    </div>
+                    <p>购物车是空的，赶紧选购吧</p>
+                </div>
+                <div
+                    class="shop-cartbasket-tablerow"
+                    v-for="(commondity, index) in shopcart.goods"
+                    :key="index"
+                >
+                    <div class="itemname">{{commondity.name}}</div>
+                    <div class="itemquantity">
+                        <button @click="itemNum('reduce',commondity)">-</button>
+                        <input type="text" v-model="commondity.pieces" />
+                        <button @click="itemNum('add',commondity)">+</button>
+                    </div>
+                    <div class="itemtotal">￥{{itemPrice(commondity)}}</div>
+                </div>
+            </div>
+            <div class="shop-cartfooter" @click="showcartbasket">
+                <span class="icon-cart">
+                    <i></i>
+                    <span
+                        class="shop-cartpieces"
+                        v-if="shopcart.goods.length"
+                    >{{shopcart.goods.length}}</span>
+                </span>
+                <p class="shop-cartfooter-text price" v-if="totalPrice">
+                    <span class="yuan">￥</span>
+                    {{totalPrice}}
+                </p>
+                <div class="shop-cartfooter-text">配送费￥{{$store.getters.shop.shop_fee}}</div>
+                <button
+                    class="shop-cartfooter-checkout"
+                    :class="{disabled:settle!='去结算 >'}"
+                    :disabled="settle!='去结算 >'"
+                    @click.stop="checkBill"
+                >{{settle}}</button>
             </div>
         </div>
     </div>
@@ -74,33 +184,30 @@
 export default {
     data() {
         return {
-            value5: 3.0,
             menuNavFixed: false,
-            shopmenu_nav: [
-                "热销",
-                "优惠",
-                "进店必看",
-                "童子炸鸡",
-                "鸡の同伙",
-                "鸡の旁友"
-            ],
-            shopmenu_nav_active: {
-                热销: true,
-                优惠: false,
-                进店必看: false,
-                童子炸鸡: false,
-                鸡の同伙: false,
-                鸡の旁友: false
+            shopmenu_nav: [],
+            shopmenu_nav_active: {},
+            params: this.$route.params,
+            // goods_type: []
+            goodsSpec: {
+                select: [true, false],
+                index: 0
             },
-            click: false
+            selectGoods: "",
+
+            //购物车高度
+            cartHeight: 0,
+
+            //购物车
+            shopcart: {
+                totalPrice: 0,
+                totalPieces: 0,
+                goods: []
+            }
         };
     },
     methods: {
         scroll(type) {
-            this.click = true;
-            setTimeout(() => {
-                this.click = false;
-            }, 10);
             this.$refs[type][0].scrollIntoView({
                 behavior: "smooth"
             });
@@ -111,12 +218,13 @@ export default {
                 document.documentElement.scrollTop ||
                 document.body.scrollTop;
 
-            if (!this.click && scrollTop >= 266) {
+            if (scrollTop >= 266) {
                 this.menuNavFixed = true;
             } else {
                 this.menuNavFixed = false;
             }
             let obj = this.getTypePositon();
+            // console.log(obj);
             this.shopmenu_nav.forEach((item, index) => {
                 let cur = obj[item];
                 let nextProperty = this.shopmenu_nav[index + 1]
@@ -160,15 +268,271 @@ export default {
             e.target.parentNode.querySelector(
                 ".goodsintroduce-tip"
             ).style.opacity = 1;
+            e.target.parentNode.querySelector(
+                ".goodsintroduce-tip"
+            ).style.display = "inline-block";
         },
         hidetip(e) {
             e.target.parentNode.querySelector(
                 ".goodsintroduce-tip"
             ).style.opacity = 0;
+            e.target.parentNode.querySelector(
+                ".goodsintroduce-tip"
+            ).style.display = "none";
+        },
+        goods(type) {
+            // console.log(type);
+            let arr = [];
+            this.params.goods.goods.forEach((item, index) => {
+                if (item.type.includes(type)) {
+                    arr.push(item);
+                }
+            });
+            // console.log(arr);
+            return arr;
+        },
+        getLowestPrice(specification) {
+            // console.log(specification);
+            let arr = specification.map(item => {
+                return item.price;
+            });
+            arr.sort();
+            return arr;
+        },
+        //处理商家信息
+        handleShopInfo() {
+            this.shopmenu_nav = [];
+            if (this.params.goods) {
+                for (let t of this.params.goods.type) {
+                    this.shopmenu_nav.push(t.title);
+                }
+                for (let i of this.shopmenu_nav) {
+                    this.$set(this.shopmenu_nav_active, i, false);
+                }
+            }
+        },
+        //根据商品名获取到商品
+        getGoodsByName(name) {
+            let arr = this.params.goods.goods.filter(item => {
+                return item.title == name;
+            });
+            this.selectGoods = arr[0];
+        },
+        //打开规格选项
+        showSepc(shopmenu, title) {
+            this.$store.dispatch("setShowMask", true);
+            this.goodsSpec.select = [];
+            this.goodsSpec.index = 0;
+
+            let str = shopmenu + title;
+            this.getGoodsByName(title);
+            let spec = this.selectGoods;
+            spec.specification.forEach((item, index) => {
+                index == 0
+                    ? this.goodsSpec.select.push(true)
+                    : this.goodsSpec.select.push(false);
+            });
+            this.$nextTick(() => {
+                this.$refs[str][0].style.display = "block";
+            });
+        },
+        //选择规格
+        selectSpec(index, title) {
+            this.goodsSpec.index = index;
+            let arr = this.goodsSpec.select.map((item, i) => {
+                if (index == i) {
+                    return true;
+                }
+                return false;
+            });
+            this.goodsSpec.select = arr;
+        },
+        //添加购物车
+        addCarts(item) {
+            let obj = {};
+            if (item.title) {
+                obj = {
+                    name: item.title,
+                    price: item.price,
+                    pieces: 1
+                };
+            } else {
+                obj = {
+                    name: this.selectGoods.title,
+                    price: this.selectGoods.specification[this.goodsSpec.index]
+                        .price,
+                    pieces: 1
+                };
+                this.$store.dispatch("setShowMask", false);
+            }
+            let exist = this.shopcart.goods.some((item, index) => {
+                if (item.name == obj.name && item.price == obj.price) {
+                    console.log(item);
+                    this.shopcart.goods[index].pieces++;
+                    return true;
+                }
+                return false;
+            });
+            !exist ? this.shopcart.goods.push(obj) : 0;
+            // console.log(this.shopcart.goods);
+            this.$nextTick(() => {
+                let cart = this.$refs["shop_cartbasket"],
+                    height = window.getComputedStyle(cart).height;
+                this.cartHeight = height;
+            });
+            localStorage.setItem("shopCart", JSON.stringify(this.shopcart));
+            // console.log(this.shopcart.goods);
+            // console.log(goodsInfo);
+        },
+        //展示购物车
+        showcartbasket() {
+            let cart = this.$refs["shop_cartbasket"],
+                elecss = window.getComputedStyle(cart),
+                top = elecss.top,
+                height = elecss.height;
+            if (parseFloat(top) != 0) {
+                this.$refs["shop_cartbasket"].style.top = 0;
+            } else {
+                this.$refs["shop_cartbasket"].style.top =
+                    -parseFloat(height) + "px";
+            }
+        },
+        //购物车高度
+        cmpheight() {
+            let cart = this.$refs["shop_cartbasket"],
+                height = window.getComputedStyle(cart).height;
+            // console.log(cart);
+            // console.log(height);
+            return height;
+        },
+        //单个商品总价
+        itemPrice(commondity) {
+            return parseFloat(
+                (commondity.pieces * commondity.price).toFixed(2)
+            );
+        },
+        //修改商品数量
+        itemNum(operate, commondity) {
+            let i = 0,
+                exist = this.shopcart.goods.some((item, index) => {
+                    if (commondity == item) {
+                        i = index;
+                        return true;
+                    }
+                    return false;
+                });
+            if (exist) {
+                if (operate == "add") {
+                    this.shopcart.goods[i].pieces++;
+                } else if (operate == "reduce") {
+                    if (this.shopcart.goods[i].pieces > 1) {
+                        this.shopcart.goods[i].pieces--;
+                    } else {
+                        this.shopcart.goods.splice(i, 1);
+                        this.$nextTick(() => {
+                            let height = this.cmpheight();
+                            this.cartHeight = height;
+                        });
+                    }
+                }
+            }
+            if (this.shopcart.goods.length == 0) {
+                localStorage.removeItem("shopCart");
+            } else {
+                localStorage["shopCart"] = JSON.stringify(this.shopcart);
+                console.log(localStorage["shopCart"]);
+            }
+        },
+        //清空购物车
+        clearCart() {
+            this.shopcart.goods = [];
+            this.$nextTick(() => {
+                let cart = this.$refs["shop_cartbasket"],
+                    height = window.getComputedStyle(cart).height;
+                this.cartHeight = height;
+            });
+            localStorage.removeItem("shopCart");
+        },
+        checkBill() {
+            console.log(1);
+        }
+    },
+    computed: {
+        totalPrice() {
+            let price = 0;
+            this.shopcart.goods.forEach((item, index) => {
+                price += item.pieces * item.price;
+            });
+            if (price) {
+                price = parseFloat(price.toFixed(2));
+            }
+            return price;
+        },
+        settle() {
+            let str = "",
+                start_send = this.$store.getters.shopInfo.start_send;
+            if (this.totalPrice) {
+                let subNum = this.totalPrice - start_send;
+                if (subNum < 0) {
+                    str = `还差 ${Math.abs(subNum.toFixed(2))} 元起送`;
+                } else {
+                    return "去结算 >";
+                }
+            } else {
+                str = "购物车是空的";
+            }
+            return str;
+        }
+    },
+    watch: {
+        params() {
+            // let arr = [];
+            // this.params.goods.forEach((item, index) => {
+            //     if (item.type) {
+            //         for (let i of item.type) {
+            //             arr.includes(i) ? 0 : arr.push(i);
+            //         }
+            //     }
+            // });
+            // for (let i of arr) {
+            //     this.$set(this.shopmenu_nav_active, i, false);
+            // }
+            // this.shopmenu_nav = arr;
+            this.handleShopInfo();
+        },
+        cartHeight() {
+            let cart = this.$refs["shop_cartbasket"];
+            if (this.shopcart.goods.length != 0) {
+                cart.style.top = "-" + this.cartHeight;
+            } else {
+                cart.style.top = -45 + "px";
+            }
+        }
+    },
+    directives: {
+        eleHeight: {
+            inserted(el) {
+                let height = window.getComputedStyle(el).height;
+                el.style.top = "-" + height;
+            }
+        }
+    },
+    created() {
+        this.handleShopInfo();
+        if (localStorage["shopCart"]) {
+            this.shopcart = JSON.parse(localStorage["shopCart"]);
+        }
+        let scrollTop =
+            window.pageYOffset ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop;
+        if (scrollTop > 266) {
+            this.menuNavFixed = true;
         }
     },
     mounted() {
         window.addEventListener("scroll", this.handleScroll);
+        // console.log(this.$refs);
     }
 };
 </script>
@@ -273,7 +637,6 @@ export default {
             .goods {
                 display: flex;
                 position: relative;
-
                 margin: 0 12px 12px 0;
                 width: calc(50% - 12px);
                 background: #ffffff;
@@ -302,26 +665,8 @@ export default {
                     }
 
                     .goodsintroduce-tip {
-                        display: inline-block;
-                        position: absolute;
-                        right: 14px;
-                        top: -25px;
-                        padding: 5px 10px;
-                        z-index: 999;
-                        border-radius: 3px;
+                        bottom: 72px;
                         max-width: 300px;
-                        box-sizing: border-box;
-                        opacity: 0;
-                        color: #ffffff;
-                        background: rgba(114, 111, 119, 0.8);
-                        transition: opacity 0.3s ease-in-out;
-                        &::before {
-                            @include triangle;
-                            border-color: rgba(114, 111, 119, 0.8) transparent
-                                transparent;
-                            bottom: -10px;
-                            right: 145px;
-                        }
                     }
 
                     .inco-star {
@@ -337,6 +682,8 @@ export default {
                         }
                     }
                     .goods-price {
+                        position: absolute;
+                        bottom: 5px;
                         color: #f74342;
                         font-weight: 700;
                         margin: 3px 0;
@@ -364,6 +711,7 @@ export default {
             .goods {
                 display: flex;
                 align-items: center;
+                position: relative;
                 padding: 15px 0;
                 margin: 0 0 12px;
                 justify-content: space-between;
@@ -398,26 +746,8 @@ export default {
                         margin: 1px 0;
                     }
                     .goodsintroduce-tip {
-                        display: inline-block;
-                        position: absolute;
-                        left: 62px;
-                        top: -15px;
-                        padding: 5px 10px;
-                        z-index: 999;
-                        border-radius: 3px;
+                        bottom: 40px;
                         max-width: 500px;
-                        box-sizing: border-box;
-                        opacity: 0;
-                        color: #ffffff;
-                        background: rgba(114, 111, 119, 0.8);
-                        transition: opacity 0.3s ease-in-out;
-                        &::before {
-                            @include triangle;
-                            border-color: rgba(114, 111, 119, 0.8) transparent
-                                transparent;
-                            bottom: -10px;
-                            right: 245px;
-                        }
                     }
 
                     .goods-price {
@@ -456,6 +786,299 @@ export default {
                         color: #ffffff;
                         cursor: pointer;
                     }
+                }
+            }
+        }
+
+        .goods-grid,
+        .goods-list {
+            .goodsintroduce-tip {
+                display: none;
+                position: absolute;
+                padding: 5px 10px;
+                z-index: 999;
+                border-radius: 3px;
+                box-sizing: border-box;
+                opacity: 0;
+                color: #ffffff;
+                background: rgba(114, 111, 119, 0.8);
+                transition: opacity 0.3s ease-in-out;
+                &::before {
+                    @include triangle;
+                    border-color: rgba(114, 111, 119, 0.8) transparent
+                        transparent;
+                    right: calc(50% - 5px);
+                    bottom: -10px;
+                }
+            }
+        }
+
+        .shop-specmenu {
+            display: none;
+            position: absolute;
+            z-index: 1001;
+            width: 300px;
+            background: #ffffff;
+            right: -305px;
+            top: -10px;
+            text-align: left;
+            border: 1px;
+            box-shadow: 0 1px 15px #ccc;
+            .shop-specmenu-specs {
+                margin: 10px;
+                padding: 12px 10px 0;
+                border: 1px solid #eee;
+                background-color: #fcfcfc;
+
+                dl {
+                    padding-bottom: 14px;
+                }
+                dt {
+                    font-size: 14px;
+                    padding-bottom: 10px;
+                    color: #666;
+                }
+                dd {
+                    display: inline-block;
+                    padding: 0 14px;
+                    min-width: 28px;
+                    height: 26px;
+                    line-height: 26px;
+                    font-size: 14px;
+                    border: 1px solid #bbb;
+                    color: #999;
+                    border-radius: 13px;
+                    margin-right: 18px;
+                    margin-bottom: 6px;
+                    cursor: pointer;
+                    &.current {
+                        border-color: #0089dc;
+                        color: #0089dc;
+                    }
+                }
+            }
+
+            .shop-specmenu-infogroup {
+                padding: 0 10px;
+                font-size: 14px;
+                color: #666;
+                line-height: 1.5;
+
+                .shop-specmenu-price {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #ff6000;
+
+                    .yen {
+                        font-size: 12px;
+                    }
+                }
+            }
+            .btns {
+                padding: 14px 10px;
+                .btn-primary {
+                    display: inline-block;
+                    padding: 8px 17px;
+                    line-height: 1;
+                    border: none;
+                    border-radius: 2px;
+                    outline: 0;
+                    cursor: pointer;
+                    font-size: 14px;
+                    text-align: center;
+                    background-color: #0089dc;
+                    color: #fff;
+                }
+                a {
+                    margin-left: 12px;
+                    color: #999;
+                }
+            }
+        }
+        .shop-specmenu::before {
+            @include triangle;
+            border: 6px solid #ffffff;
+            border-color: transparent #ffffff transparent transparent;
+            left: -12px;
+            top: 20px;
+        }
+    }
+    .shop-cart {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        width: 320px;
+        height: 46px;
+        font-size: 14px;
+        z-index: 102;
+        .shop-cartbasket {
+            position: absolute;
+            top: -45px;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 1px 15px #ccc;
+            transition: top 0.3s ease-in-out;
+
+            .cartbasket-head {
+                box-sizing: border-box;
+                padding: 12px 10px;
+                height: 45px;
+                font-size: 14px;
+                border-bottom: 1px solid #eeeeee;
+                background: #fafafa;
+                border-top: 2px solid #0089dc;
+                .cartbasket-headrow {
+                    text-align: left;
+                    color: #333333;
+                    a {
+                        color: #0089dc;
+                    }
+                }
+            }
+            .shop-cartbasket-empty {
+                color: #999;
+                text-align: center;
+                .icon-cart {
+                    margin: 40px 0 20px;
+                    i {
+                        display: inline-block;
+                        width: 42px;
+                        height: 42px;
+                        background: url("../../images/icons/emptycart-icon.svg");
+                        background-size: cover;
+                    }
+                }
+                p {
+                    font-size: 14px;
+                    margin-bottom: 40px;
+                }
+            }
+            .shop-cartbasket-tablerow {
+                display: flex;
+                padding: 10px 10px;
+                .itemname {
+                    width: 50%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    padding-right: 5px;
+                    box-sizing: border-box;
+                    text-align: left;
+                    color: #333333;
+                }
+                .itemquantity {
+                    width: 25%;
+                    text-align: center;
+                    button {
+                        background: #ffffff;
+                        height: 20px;
+                        width: 20px;
+                        line-height: 18px;
+                        border: 1px solid #dddddd;
+                        outline: none;
+                        cursor: pointer;
+                        color: #666666;
+                    }
+                    input {
+                        width: 30px;
+                        height: 20px;
+                        border: none;
+                        box-sizing: border-box;
+                        border-top: 1px solid #dddddd;
+                        border-bottom: 1px solid #dddddd;
+                        text-align: center;
+                        font-size: 12px;
+                        outline: none;
+                        color: #666666;
+                    }
+                }
+                .itemtotal {
+                    flex: auto;
+                    text-align: right;
+                    color: #f17530;
+                }
+            }
+        }
+
+        .shop-cartfooter {
+            display: flex;
+            align-items: center;
+            height: 46px;
+            line-height: 46px;
+            background: #2c2c2c;
+            box-shadow: 0 1px 3px #2c2c2c;
+            cursor: pointer;
+            position: relative;
+
+            .icon-cart {
+                display: flex;
+                position: relative;
+                width: 40px;
+                justify-content: center;
+                align-items: center;
+                i {
+                    display: inline-block;
+                    background-image: url("../../images/icons/shop-cart.svg");
+                    background-size: cover;
+                    width: 20px;
+                    height: 20px;
+                }
+                .shop-cartpieces {
+                    position: absolute;
+                    height: 16px;
+                    line-height: 16px;
+                    min-width: 16px;
+                    border-radius: 50%;
+                    right: 0;
+                    top: -6px;
+                    text-align: center;
+                    font-size: 12px;
+                    font-weight: 700;
+                    background-color: #ff2828;
+                    color: #ffffff;
+                }
+            }
+            .shop-cartfooter-text {
+                font-size: 12px;
+                margin-left: 2px;
+                padding-left: 6px;
+                color: #999;
+                border-left: 1px solid #555;
+                line-height: 1;
+                &.price {
+                    height: 100%;
+                    line-height: 46px;
+                    padding: 0;
+                    margin: 0;
+                    border-left: none;
+                    font-size: 24px;
+                    color: #ffffff;
+                    .yuan {
+                        margin-right: -7px;
+                        font-size: 8px;
+                    }
+                }
+            }
+            .shop-cartfooter-checkout {
+                position: absolute;
+                border: none;
+                outline: none;
+                padding: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 120px;
+                text-align: center;
+
+                font-size: 14px;
+                background-color: #51d862;
+                font-weight: 700;
+                color: #fff;
+                cursor: pointer;
+                &.disabled {
+                    background-color: #e4e4e4;
+                    color: #333;
+                    cursor: default;
                 }
             }
         }

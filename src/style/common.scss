@@ -27,6 +27,12 @@ i {
     font-weight: 4000;
 }
 
+dl,
+dd {
+    padding: 0;
+    margin: 0;
+}
+
 @font-face {
     font-family: 'eleme.a61c32';
     src: url('../assets/font/eleme.a61c32.woff') format('woff'),

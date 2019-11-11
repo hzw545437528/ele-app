@@ -1,3 +1,5 @@
+import vue from '../main';
+
 const server: any = {}
 
 //获取验证码
@@ -55,24 +57,32 @@ server.getOrders = function (_this: any) {
     })
 }
 //根据订单号获取订单
-server.getOrderById = function (_this:any, orderId:String) {
+server.getOrderById = function (_this: any, orderId: String) {
     return new Promise((resovle, reject) => {
         let params = {
             orderId: orderId
         };
-        _this.$axios.get('/api/getOrderById', { params: params }).then((res:any) => {
+        _this.$axios.get('/api/getOrderById', { params: params }).then((res: any) => {
             resovle(res);
         })
     })
 }
 //根据商店名获取商店
-server.getShopByName = function (_this:any, shopName:String) {
+server.getShopByName = function (_this: any, shopName: String) {
     return new Promise((resovle, reject) => {
         let params = {
             shopName: shopName
         };
-        _this.$axios.get('/api/getShopByName', { params: params }).then((res:any) => {
+        _this.$axios.get('/api/getShopByName', { params: params }).then((res: any) => {
             resovle(res);
+        })
+    })
+}
+//根据id获取商店
+server.getShopById = function (id: string) {
+    return new Promise((resovle, reject) => {
+        (vue as any).$axios('/api/getShopById', { params: { id: id } }).then((res: any) => {
+            resovle(res)
         })
     })
 }
@@ -83,6 +93,19 @@ server.getShopImg = function (_this: any, filePath: String) {
             return 'data:image/png;base64,' + btoa(
                 new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
             );
+        }).then((res: any) => {
+            resolve(res)
+        })
+    })
+}
+
+//获取商家信息
+server.getShopInfo = function (shop_id: any) {
+    return new Promise((resolve) => {
+        (vue as any).$axios.get('/api/getShopInfo', {
+            params: {
+                shop_id: shop_id
+            }
         }).then((res: any) => {
             resolve(res)
         })

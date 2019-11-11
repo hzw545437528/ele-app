@@ -96,6 +96,7 @@ router.beforeResolve((to, from, next) => {
     }
     else {
         vue.$store.dispatch('setShowLocation', true);
+        vue.$store.dispatch('setShopInfo', {});
     }
     next();
 });

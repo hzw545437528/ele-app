@@ -258,6 +258,13 @@ export default {
             background-color: rgba(0, 0, 0, 0.1) !important;
         }
     }
+    .tools li:nth-child(1),
+    .tools li:nth-child(2) {
+        color: #cccccc !important;
+        &:hover {
+            color: #ffffff !important;
+        }
+    }
     .header-drop-down {
         background: rgba(0, 0, 0, 0.1) !important;
     }

@@ -19,6 +19,15 @@ const mutations: MutationTree<any> = {
     },
     SET_SHOPLAYOUT(state: any, shoplayout: any): void {
         state.shoplayout = shoplayout
+    },
+    SET_SHOWMASK(state: any, showMask: Boolean): void {
+        state.showMask = showMask
+    },
+    SET_SHOPINFO(state: any, shopInfo: any): void {
+        state.shopInfo = shopInfo
+    },
+    SET_SHOP(state: any, shop: any): void {
+        state.shop = shop
     }
 }
 
