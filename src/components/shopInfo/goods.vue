@@ -173,7 +173,7 @@
                     class="shop-cartfooter-checkout"
                     :class="{disabled:settle!='去结算 >'}"
                     :disabled="settle!='去结算 >'"
-                    @click.stop="checkBill"
+                    @click.stop="checkout"
                 >{{settle}}</button>
             </div>
         </div>
@@ -184,6 +184,7 @@
 export default {
     data() {
         return {
+            shopName: this.$store.getters.shopInfo.shop_name,
             menuNavFixed: false,
             shopmenu_nav: [],
             shopmenu_nav_active: {},
@@ -380,7 +381,11 @@ export default {
                     height = window.getComputedStyle(cart).height;
                 this.cartHeight = height;
             });
-            localStorage.setItem("shopCart", JSON.stringify(this.shopcart));
+            let shopCart = {
+                shopName: this.$store.getters.shopInfo.shop_name,
+                cartInfo: this.shopcart
+            };
+            localStorage.setItem(this.shopName, JSON.stringify(shopCart));
             // console.log(this.shopcart.goods);
             // console.log(goodsInfo);
         },
@@ -437,10 +442,15 @@ export default {
                 }
             }
             if (this.shopcart.goods.length == 0) {
-                localStorage.removeItem("shopCart");
+                localStorage.removeItem(this.shopName);
             } else {
-                localStorage["shopCart"] = JSON.stringify(this.shopcart);
-                console.log(localStorage["shopCart"]);
+                let shopCart = {
+                    shopName: this.$store.getters.shopInfo.shop_name,
+                    cartInfo: this.shopcart
+                };
+                localStorage.setItem(this.shopName, JSON.stringify(shopCart));
+                localStorage.setItem("indexShopCart", JSON.stringify(shopcart));
+                // console.log(localStorage["shopCart"]);
             }
         },
         //清空购物车
@@ -451,10 +461,12 @@ export default {
                     height = window.getComputedStyle(cart).height;
                 this.cartHeight = height;
             });
-            localStorage.removeItem("shopCart");
+            localStorage.removeItem(this.shopName);
         },
-        checkBill() {
-            console.log(1);
+        checkout() {
+            this.$router.push({
+                name: "cart/checkout"
+            });
         }
     },
     computed: {
@@ -519,8 +531,9 @@ export default {
     },
     created() {
         this.handleShopInfo();
-        if (localStorage["shopCart"]) {
-            this.shopcart = JSON.parse(localStorage["shopCart"]);
+        if (localStorage[this.shopName]) {
+            console.log(JSON.parse(localStorage[this.shopName]).cartInfo);
+            this.shopcart = JSON.parse(localStorage[this.shopName]).cartInfo;
         }
         let scrollTop =
             window.pageYOffset ||
@@ -969,28 +982,7 @@ export default {
                 .itemquantity {
                     width: 25%;
                     text-align: center;
-                    button {
-                        background: #ffffff;
-                        height: 20px;
-                        width: 20px;
-                        line-height: 18px;
-                        border: 1px solid #dddddd;
-                        outline: none;
-                        cursor: pointer;
-                        color: #666666;
-                    }
-                    input {
-                        width: 30px;
-                        height: 20px;
-                        border: none;
-                        box-sizing: border-box;
-                        border-top: 1px solid #dddddd;
-                        border-bottom: 1px solid #dddddd;
-                        text-align: center;
-                        font-size: 12px;
-                        outline: none;
-                        color: #666666;
-                    }
+                    @include commondityPiece;
                 }
                 .itemtotal {
                     flex: auto;

@@ -50,9 +50,8 @@ const routes = [
                 ]
             },
             {
-                path: '/order',
-                redirect: '/profile/order',
-                component: () => import('../page/order.vue'),
+                path: '/profile',
+                component: () => import('../page/profile.vue'),
                 children: [
                     {
                         path: '/profile/order',
@@ -69,6 +68,11 @@ const routes = [
         ]
     },
     {
+        path: '/cart/checkout',
+        name: 'cart/checkout',
+        component: () => import('../page/checkout.vue')
+    },
+    {
         path: '/login',
         name: 'login',
         component: () => import('../page/login.vue')
@@ -78,7 +82,11 @@ const routes = [
     }
 ];
 const router = new VueRouter({
-    routes
+    routes,
+    //滚动条位置
+    scrollBehavior(to, from, savedPosition) {
+        return { x: 0, y: 0 };
+    }
 });
 router.beforeEach((to, from, next) => {
     const isLogin = localStorage.login_user ? true : false;
@@ -96,7 +104,8 @@ router.beforeResolve((to, from, next) => {
     }
     else {
         vue.$store.dispatch('setShowLocation', true);
-        vue.$store.dispatch('setShopInfo', {});
+        // vue.$store.dispatch('setShopInfo', {})
+        // vue.$store.dispatch('setShop', {})
     }
     next();
 });

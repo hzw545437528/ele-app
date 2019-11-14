@@ -11,7 +11,7 @@
             <div class="content">
                 <router-view></router-view>
             </div>
-            <footer class="footer">123123</footer>
+            <footer class="footer">底部</footer>
         </div>
         <SideBar v-if="showSideBar"></SideBar>
         <Mymask v-if="$store.getters.showMask"></Mymask>

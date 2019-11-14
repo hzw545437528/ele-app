@@ -17,7 +17,10 @@
                 <div class="toolbar-separator"></div>
                 <router-link to class="toolbar-btn toolbar-cartbtn">
                     <i class="iconfont icon-gouwuche"></i>
-                    <div @click="translateShop('in1','in2')">购物车</div>
+                    <div @click="translateShop('in1','in2')" class="shopcartBtn">
+                        购物车
+                        <i class="toolbar-cartnum">2</i>
+                    </div>
                 </router-link>
                 <div class="toolbar-separator"></div>
                 <router-link to class="toolbar-btn">
@@ -68,6 +71,32 @@
                 <a href="/" v-if="isShow">购物车</a>
                 <a href="/" v-else>我的信息</a>
                 <span class="el-icon-d-arrow-right" @click="translate('in1','in2')"></span>
+            </div>
+            <div class="sidebarcart">
+                <dl>
+                    <dt>
+                        <span>1号购物车</span>
+                        <a href="javascript:">[清空]</a>
+                    </dt>
+                    <dd>
+                        <div class="sidebarcart-name">叫了个童子鸡</div>
+                        <div class="sidebarcart-quantity">
+                            <span>-</span>
+                            <input type="text" value="1" />
+                            <span>+</span>
+                        </div>
+                        <div class="sidebarcart-price">44.8</div>
+                    </dd>
+                    <dd>
+                        <div class="sidebarcart-name">叫了个童子鸡</div>
+                        <div class="sidebarcart-quantity">
+                            <span>-</span>
+                            <input type="text" value="1" />
+                            <span>+</span>
+                        </div>
+                        <div class="sidebarcart-price">44.8</div>
+                    </dd>
+                </dl>
             </div>
         </div>
     </div>
@@ -178,6 +207,101 @@ export default {
 </script>
 <style lang="scss">
 @import "../../style/mixin.scss";
+#side-bar {
+    position: relative;
+    z-index: 1000;
+    .shopcartBtn {
+        .toolbar-cartnum {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            font-weight: 700;
+        }
+    }
+    .sidebarcart {
+        dl {
+            padding: 10px;
+            background-color: #fff;
+            border: solid #ddd;
+            border-width: 1px 0;
+            margin-bottom: 10px;
+        }
+        dt {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            border-bottom: 1px solid #ddd;
+            padding: 2px 3px;
+            color: #666;
+            a {
+                color: #009fcc;
+                font-size: 12px;
+            }
+        }
+        dd {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 20px;
+            color: #666;
+            &:hover {
+                background: #f9f9f9;
+                .sidebarcart-quantity {
+                    span {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                }
+            }
+            .sidebarcart {
+                &-name {
+                    width: 45%;
+                    text-align: left;
+                }
+                &-quantity {
+                    width: 26%;
+                    height: 20px;
+                    text-align: center;
+                    @include commondityPiece;
+                    span {
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        text-align: center;
+                        border: 1px solid #ddd;
+                        transition: opacity 0.2s ease, visibility 0.2s ease;
+                        opacity: 0;
+                        visibility: hidden;
+                        user-select: none;
+                        background: #f5f5f5;
+                        color: #999;
+                        vertical-align: bottom;
+                        font-size: 12px;
+                        line-height: 18px;
+                        cursor: pointer;
+                    }
+                    input {
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        text-align: center;
+                        border: 1px solid #ddd;
+                    }
+                }
+                &-price {
+                    flex: auto;
+                    font-weight: 700;
+                    text-align: right;
+                    color: #f17530;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+}
 .right-toolbar {
     position: fixed;
     top: 0;
