@@ -106,6 +106,7 @@ export default {
         li {
             width: 112px;
             color: $f;
+            font-size: 16px;
         }
         li:hover {
             cursor: pointer;

@@ -27,15 +27,15 @@
                         class="card user-nav"
                         ref="user-nav"
                     >
-                        <router-link to>
+                        <router-link to="/profile">
                             <i class="el-icon-s-custom"></i>
                             个人中心
                         </router-link>
-                        <router-link to>
+                        <router-link to="/profile/favor">
                             <i class="el-icon-star-on"></i>
                             我的收藏
                         </router-link>
-                        <router-link to>
+                        <router-link to="/profile/address">
                             <i class="el-icon-location-outline"></i>
                             我的地址
                         </router-link>

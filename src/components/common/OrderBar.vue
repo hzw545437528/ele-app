@@ -79,8 +79,6 @@ export default {};
 }
 
 #orderBar {
-    width: 1180px;
-    margin: 0 auto;
     background: #f5f5f5;
 
     .profile-sidebar {

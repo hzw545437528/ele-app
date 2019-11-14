@@ -519,7 +519,7 @@ export default {
         background: #ffffff;
 
         .shop-profile-right {
-            @include shop-profile-show();
+            @include shop-profile-show;
             left: calc(100% + 2px);
         }
 

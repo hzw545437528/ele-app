@@ -57,6 +57,36 @@ const routes = [
                 component: () => import('../page/profile.vue'),
                 children: [
                     {
+                        path: '',
+                        name: '/profile/personCenter',
+                        component: () => import("../page/profile/personCenter.vue")
+                    },
+                    {
+                        path: '/profile/hongbao',
+                        name: 'profile/hongbao',
+                        component: () => import("../page/profile/hongbao.vue")
+                    },
+                    {
+                        path: '/profile/points',
+                        name: 'profile/points',
+                        component: () => import("../page/profile/points.vue")
+                    },
+                    {
+                        path: '/profile/info',
+                        name: 'profile/info',
+                        component: () => import("../page/profile/info.vue")
+                    },
+                    {
+                        path: '/profile/address',
+                        name: 'profile/address',
+                        component: () => import("../page/profile/address.vue")
+                    },
+                    {
+                        path: '/profile/favor',
+                        name: 'profile/favor',
+                        component: () => import("../page/profile/favor.vue")
+                    },
+                    {
                         path: '/profile/order',
                         name: 'order',
                         component: () => import('../page/recentOrder.vue')
@@ -112,7 +142,26 @@ router.beforeResolve((to: any, from: any, next: any) => {
         // vue.$store.dispatch('setShopInfo', {})
         // vue.$store.dispatch('setShop', {})
     }
-
+    let name = to.name,
+        navName = "";
+    console.log(name);
+    if (name.includes("personCenter")) {
+        navName = "个人中心";
+    } else if (name.includes("order")) {
+        navName = "近三个月订单"
+    } else if (name.includes("info")) {
+        navName = "个人资料"
+    } else if (name.includes("address")) {
+        navName = "地址管理"
+    } else if (name.includes("hongbao")) {
+        navName = "我的红包"
+    } else if (name.includes("points")) {
+        navName = "我的金币"
+    }
+    else if (name.includes("favor")) {
+        navName = "我的收藏"
+    }
+    vue.$store.dispatch('setNavName', navName)
     next()
 })
 

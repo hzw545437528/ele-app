@@ -3,7 +3,7 @@
         <div class="order-content">
             <h3>近三个月订单</h3>
             <div class="img">
-                <img src="/img/takeout.408a87.408a87ec.png" alt="">
+                <img src="/img/takeout.408a87.408a87ec.png" alt />
             </div>
             <table>
                 <thead>
@@ -19,14 +19,18 @@
                 <tbody>
                     <tr class="order-profile" v-for="(item, index) in orderData" :key="index">
                         <td>{{item.order_time}}</td>
-                        <td><img :src="shopsImage[item.img]" :alt="item.shop_name" /></td>
+                        <td>
+                            <img :src="shopsImage[item.img]" :alt="item.shop_name" />
+                        </td>
                         <td>
                             <p>
-                                <span v-for="(i, index) in orderMenu(item.order_menu)" :key="index"">
+                                <span v-for="(i, index) in orderMenu(item.order_menu)" :key="index">
                                     {{i}}{{orderNum(item.order_num)[index]}}份
-                                    <span v-if="((index+1)!=item.totalnum)">/</span>
+                                    <span
+                                        v-if="((index+1)!=item.totalnum)"
+                                    >/</span>
                                 </span>
-                                <span class="bolder"> {{item.totalnum}} </span>个菜品
+                                <span class="bolder">{{item.totalnum}}</span>个菜品
                             </p>
                             <p>订单号：{{item.order_id}}</p>
                         </td>
@@ -34,7 +38,9 @@
                         <td>{{item.state}}</td>
                         <td>
                             <div class="order-detail">
-                                <router-link :to="{name: 'orderDetail',params: {orderId: item.order_id} }">订单详情</router-link>
+                                <router-link
+                                    :to="{name: 'orderDetail',params: {orderId: item.order_id} }"
+                                >订单详情</router-link>
                             </div>
                             <div v-if="(item.state=='等待评价')">
                                 <div class="display">
@@ -44,12 +50,12 @@
                                     </div>
                                     <div class="once-more1">
                                         <router-link to="/profile/order/id">再来一份</router-link>
-                                    </div> 
+                                    </div>
                                 </div>
-                            </div>  
+                            </div>
                             <div class="once-more2" v-else>
                                 <router-link to="/profile/order/id">再来一份</router-link>
-                            </div>    
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -61,31 +67,28 @@
 export default {
     data() {
         return {
-            orderData:[],
+            orderData: [],
             shopsImage: {},
-            shopData:[]
-        }
+            shopData: []
+        };
     },
     mounted() {
-        this.getOrders(),
-        this.orderMenu(),
-        this.orderNum()
+        this.getOrders(), this.orderMenu(), this.orderNum();
     },
-    methods:{ 
+    methods: {
         getOrders() {
-            this.$server
-                .getOrders(this)
-                .then(res => {
-                    res.data.forEach(item => {
-                        this.$server.getShopByName(this,item.shop_name).then(res => {
+            this.$server.getOrders(this).then(res => {
+                res.data.forEach(item => {
+                    this.$server
+                        .getShopByName(this, item.shop_name)
+                        .then(res => {
                             this.shopData = res.data;
                             item.img = this.shopData[0].img;
                             this.orderData.push(item);
                             this.getShopImg(item.img);
                         });
-                    });
                 });
-            
+            });
         },
         orderMenu(str) {
             let arr = [];
@@ -105,9 +108,12 @@ export default {
             this.$server.getShopImg(this, imgPath).then(res => {
                 this.$set(this.shopsImage, imgPath, res);
             });
-        },
+        }
+    },
+    created() {
+        this.$store.dispatch("setNavName", "近三个月订单");
     }
-}
+};
 </script>
 
 <style lang="scss">
@@ -117,16 +123,13 @@ export default {
 }
 
 #recentOrder {
-    width: 1180px;
-    margin: 0 auto;
-    background:#f5f5f5;
+    background: #f5f5f5;
 
     .order-content {
-        margin-left: 170px;
         border: 1px solid #eee;
         background-color: #fff;
         min-height: 680px;
-        padding: 20px 18px; 
+        padding: 20px 18px;
 
         h3 {
             float: left;
@@ -145,11 +148,11 @@ export default {
 
         table {
             display: table;
-            width:100%;
+            width: 100%;
             border-collapse: separate;
             position: relative;
-            top:-13px;
-            border-spacing:0;
+            top: -13px;
+            border-spacing: 0;
 
             tr {
                 display: table-row;
@@ -160,124 +163,125 @@ export default {
                 th {
                     display: table-cell;
                     vertical-align: inherit;
-                    font-size:13px;
-                    height:30px;
+                    font-size: 13px;
+                    height: 30px;
                     text-align: -internal-center;
                 }
                 & th:nth-child(1) {
-                    width:77px;     
+                    width: 77px;
                 }
                 & th:nth-child(2) {
-                    width:124px;
+                    width: 124px;
                 }
                 & th:nth-child(3) {
-                    width:393px;
+                    width: 393px;
                 }
-                & th:nth-child(4),th:nth-child(5),th:nth-child(6) {
-                    width:126px;
+                & th:nth-child(4),
+                th:nth-child(5),
+                th:nth-child(6) {
+                    width: 126px;
                 }
 
                 td {
-                    height:134px;
+                    height: 134px;
                 }
                 & td:nth-child(1) {
-                    color:#999;
-                    font-size:12px;
+                    color: #999;
+                    font-size: 12px;
                 }
                 & td:nth-child(2) {
                     img {
-                        width:70px;
-                        height:70px;
-                        border-radius:45px;
+                        width: 70px;
+                        height: 70px;
+                        border-radius: 45px;
                     }
                 }
                 & td:nth-child(3) {
-                    color:#999;
-                    font-size:12px;
+                    color: #999;
+                    font-size: 12px;
                     p {
-                        text-align:left;
-                        margin:0px;
+                        text-align: left;
+                        margin: 0px;
                         & span:nth-child(1) {
-                            color:#999;
-                            font-size:12px;
+                            color: #999;
+                            font-size: 12px;
                         }
                         .bolder {
-                            color:#666;
-                            font-weight:bolder;
+                            color: #666;
+                            font-weight: bolder;
                         }
                     }
                 }
                 & td:nth-child(4) {
-                    font-weight:bolder;
+                    font-weight: bolder;
                 }
                 & td:nth-child(5) {
-                    font-size:14px;
-                    color:#999;
+                    font-size: 14px;
+                    color: #999;
                 }
                 & td:nth-child(6) {
-                    position:relative;
+                    position: relative;
                     a {
-                        color:#000;
+                        color: #000;
                     }
                     .order-detail {
-                        font-size:12px;
-                        padding:4px 0;
-                        margin:10px 24px;
-                        border:1px solid #eee;
+                        font-size: 12px;
+                        padding: 4px 0;
+                        margin: 10px 24px;
+                        border: 1px solid #eee;
                         &:hover {
-                            border-color:#4169E1;
+                            border-color: #4169e1;
                             a {
-                                color:#4169E1;
+                                color: #4169e1;
                             }
                         }
                     }
                     .display {
                         &:hover {
                             .once-more1 {
-                                display:block;
+                                display: block;
                             }
                         }
                     }
                     .order-appraise {
-                        font-size:12px;
-                        padding:4px 0;
-                        background-color:#ff4248;
-                        margin:10px 24px;
-                        border:1px solid #eee;
+                        font-size: 12px;
+                        padding: 4px 0;
+                        background-color: #ff4248;
+                        margin: 10px 24px;
+                        border: 1px solid #eee;
                         a {
-                            color:#fff;
+                            color: #fff;
                         }
                         .el-icon-arrow-down {
-                            color:#fff;
+                            color: #fff;
                         }
                     }
                     .once-more1 {
-                        display:none;
-                        position:absolute;
-                        top:88px;
-                        left:5px;
-                        font-size:12px;
-                        padding:4px 9px;
-                        border:1px solid #eee;
-                        margin:10px 24px;
+                        display: none;
+                        position: absolute;
+                        top: 88px;
+                        left: 5px;
+                        font-size: 12px;
+                        padding: 4px 9px;
+                        border: 1px solid #eee;
+                        margin: 10px 24px;
                         &:hover {
-                            background:#f5f5f5;
+                            background: #f5f5f5;
                             a {
-                                color:#000;
+                                color: #000;
                             }
                         }
                         a {
-                            color:#999;
+                            color: #999;
                         }
-                        
                     }
                     .once-more2 {
-                        font-size:12px;
-                        padding:4px 0;
-                        margin:10px 24px;
+                        font-size: 12px;
+                        padding: 4px 0;
+                        margin: 10px 24px;
                         &:hover {
                             a {
-                                color:#4169E1;
+                                color: #4169e1;
                             }
                         }
                     }
@@ -285,11 +289,9 @@ export default {
             }
 
             .table-title {
-                background-color:#f5f5f5;
+                background-color: #f5f5f5;
             }
         }
     }
-
-    
 }
 </style>
