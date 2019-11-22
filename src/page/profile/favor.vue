@@ -1,25 +1,28 @@
 <template>
     <div id="profile-favor">
-        <h3 class="profile-title">我的收藏</h3>
-
-        <div class="favor-restaurants">
-            <h4 class="favor-title">
-                当前区域共有
-                <span>0</span>
-                家可配送商家
-            </h4>
-            <div class="nodata">
-                <p class="nodata-container">暂无可配送商家</p>
-            </div>
-        </div>
-        <div class="favor-restaurants"></div>
-        <div class="favor-restaurants">
-            <h4 class="favor-title">当前区域不可配送的商家</h4>
-            <div class="nodata">
-                <p class="nodata-container">暂无可配送商家</p>
-            </div>
-        </div>
-        <div class="favor-restaurants"></div>
+        <profile-panel>
+            <template #title>我的收藏</template>
+            <template #content>
+                <div class="favor-restaurants">
+                    <h4 class="favor-title">
+                        当前区域共有
+                        <span>0</span>
+                        家可配送商家
+                    </h4>
+                    <div class="nodata">
+                        <p class="nodata-container">暂无可配送商家</p>
+                    </div>
+                </div>
+                <div class="favor-restaurants"></div>
+                <div class="favor-restaurants">
+                    <h4 class="favor-title">当前区域不可配送的商家</h4>
+                    <div class="nodata">
+                        <p class="nodata-container">暂无不可配送商家</p>
+                    </div>
+                </div>
+                <div class="favor-restaurants"></div>
+            </template>
+        </profile-panel>
     </div>
 </template>
 
@@ -29,11 +32,11 @@ export default {};
 
 <style lang="scss">
 #profile-favor {
-    text-align: left;
-    border: 1px solid #eee;
-    background-color: #fff;
-    min-height: 680px;
-    padding: 20px 18px;
+    // text-align: left;
+    // border: 1px solid #eee;
+    // background-color: #fff;
+    // min-height: 680px;
+    // padding: 20px 18px;
     .profile-title {
         border-bottom: 2px solid #f4f4f4;
         padding: 0 20px 11px;

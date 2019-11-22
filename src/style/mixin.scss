@@ -46,6 +46,7 @@ $f: #ffffff;
     transform: rotateZ(90deg);
 }
 
+//文字超出省略号样式
 @mixin ui-ellipsis {
     overflow: hidden;
     white-space: nowrap;

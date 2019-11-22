@@ -1,10 +1,14 @@
 <template>
-    <div id="profile-hongbao">我的红包</div>
+    <div id="profile-hongbao">
+        <profile-panel>
+            <template #title>我的红包</template>
+        </profile-panel>
+    </div>
 </template>
 
 <script>
 export default {};
 </script>
 
-<style>
+<style lang="scss">
 </style>

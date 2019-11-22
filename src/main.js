@@ -13,6 +13,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
 Vue.prototype.$server = server;
 Vue.use(elementUi);
+Vue.component('profile-panel', () => import('./components/common/ProfilePanel.vue'));
 const vue = new Vue({
     router,
     store,

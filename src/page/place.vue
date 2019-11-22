@@ -113,9 +113,11 @@
         <div class="show-more" @click="showMore" v-if="!isLoading&&hasMore">
             <span>点击加载更多商家...</span>
         </div>
+        <Dialog :open.sync="showDialog" :info="dialogInfo" @update:open="val => showDialog = val"></Dialog>
     </div>
 </template>
 <script>
+import Dialog from "../components/common/Dialog";
 export default {
     name: "place",
     data() {
@@ -134,7 +136,14 @@ export default {
             shopsImage: {},
             showTimeOut: null,
             isFirst: true,
-            hasShop: true
+            hasShop: true,
+
+            showDialog: false,
+            dialogInfo: {
+                title: "请求出错",
+                type: "warn",
+                msg: "请求更多商家，请先登录"
+            }
         };
     },
     methods: {
@@ -336,12 +345,16 @@ export default {
         },
         //加载更多
         showMore() {
-            this.page++;
-            this.isFirst = false;
-            if (this.isAll) {
-                this.getAllShops();
+            if (localStorage["login_user"]) {
+                this.page++;
+                this.isFirst = false;
+                if (this.isAll) {
+                    this.getAllShops();
+                } else {
+                    this.getShops();
+                }
             } else {
-                this.getShops();
+                this.showDialog = true;
             }
         },
         //鼠标移入展示商家信息
@@ -390,6 +403,9 @@ export default {
             this.setShopType();
         }
         this.getAllShops();
+    },
+    components: {
+        Dialog
     }
 };
 </script>

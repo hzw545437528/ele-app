@@ -186,12 +186,9 @@ export default {
 }
 
 #orderDetail {
-    width: 1180px;
-    margin: 0 auto;
     background: #f5f5f5;
 
     .order-content {
-        margin-left: 170px;
         border: 1px solid #eee;
         background-color: #fff;
         min-height: 680px;
